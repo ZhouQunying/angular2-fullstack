@@ -1,1 +1,0 @@
-{"version":3,"sources":["app.js"],"names":[],"mappings":"AAAA,YAAY,CAAC","file":"main.js","sourcesContent":["'use strict';\n\nimport express from 'express';"],"sourceRoot":"/source/"}
