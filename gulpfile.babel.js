@@ -11,41 +11,79 @@ import del from 'del';
 // import concat from 'gulp-concat';
 
 const $ = gulpLoadPlugins();
-const _browserSync = browserSync.create();
+const reload = browserSync.reload;
 
-const dirs = {
-    dest: './dist'
-}
+// const paths = {
+//     client: {
+//         sass: 'client/**/*.scss'
+//     },
+//     server: {
+//         index: 'dist/server/app.js'
+//     }
+// }
 
 // gulp.task('build', () => {
-//     return gulp.src('client/**/*.js')
+//     return gulp.src(['client/**/*.js'])
 //         .pipe($.sourcemaps.init())
-//         .pipe($.babel({
-//             presets: ['es2015'],
-//             plugins: ['transform-runtime']
-//         }))
+//         .pipe($.babel())
 //         .pipe($.concat('main.js'))
-//         .pipe($.sourcemaps.write('.'))
-//         .pipe(gulp.dest(dirs.dest));
+//         .pipe($.sourcemaps.write('.tmp'))
+//         .pipe(gulp.dest('dist/client'));
 // })
 
 gulp.task('default', () => {
     return gulp.src('server/**/*.js')
         .pipe($.sourcemaps.init())
         .pipe($.babel())
+        .pipe($.sourcemaps.write())
+        .pipe(gulp.dest('dist/server'));
 })
 
+// serve
+gulp.task('serve', ['serve:node', 'serve: client'], () => {
+    
+})
+gulp.task('serve:node', () => {
+    $.nodemon({
+        script: 'server',
+        ext: 'js',
+        env: {'NODE_ENV': 'development'}
+    });
+})
+gulp.task('serve:client', () => {
+    browserSync.init({
+        notify: false,
+        port: 9000,
+        server: {
+            baseDir: ['.tmp', 'client']
+        }
+    });
+    // gulp.watch('client/**/*.scss', ['sass']);
+    // gulp.watch('client/**/*.html').on('change', reload);
+})
+
+// clean
 gulp.task('clean', () => {
-    del([dirs.dest]).then(paths => {
+    del(['.tmp', 'dist']).then(paths => {
         console.log('Deleted files and folders:\n', paths.join('\n'));
     });
 })
 
-gulp.task('serve', () => {
-    $.nodemon({
-        tasks: ['default'],
-        script: './server/app.js',
-        ext: 'js',
-        env: {'NODE_ENV': 'development'}
-    });
+// styles
+gulp.task('styles', () => {
+    return gulp.src('client/**/*.scss')
+        .pipe($.sourcemaps.init())
+        .pipe($.sass({
+            outputStyle: 'compressed',
+            precsion: 10,
+            includePaths: ['.']
+        }).on('error', $.sass.logError))
+        .pipe($.autoprefixer({browsers: ['last 1 version']}))
+        .pipe($.sourcemaps.write())
+        .pipe(gulp.dest('.tmp/styles'))
+        .pipe(reload({stream: true}));
+})
+
+gulp.task('styles:watch', () => {
+    gulp.watch('client/**/*.scss', ['styles'])
 })
