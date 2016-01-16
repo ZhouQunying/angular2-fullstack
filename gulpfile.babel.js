@@ -18,9 +18,9 @@ gulp.task('styles', () => {
             css: '.tmp/client',
             sass: 'client',
             image: 'client/assets/images'
-        })).on('error', (error) => {
-            console.log(error);
-            this.emit('end');
+        })).on('error', (err) => {
+            console.log(err);
+            this.end();
         })
         .pipe($.autoprefixer({browsers: ['last 1 version']}))
         .pipe($.minifyCss())
@@ -40,9 +40,7 @@ gulp.task('lint', () => {
 // html
 gulp.task('html', ['styles'], () => {
     const htmlTasks = lazypipe()
-        .pipe(() => {
-            return $.useref({searchPath: ['.tmp', 'client', '.']});
-        })
+        .pipe($.useref)
         .pipe(() => {
             return $.if('*.js', $.uglify());
         })
@@ -56,6 +54,11 @@ gulp.task('html', ['styles'], () => {
     return gulp.src('client/*.html')
         .pipe(htmlTasks())
         .pipe(gulp.dest('dist/client'));
+})
+
+// images
+gulp.task('images', () => {
+    return gulp.src('client/assets/images/**/*')
 })
 
 // serve
