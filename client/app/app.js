@@ -1,1 +1,3 @@
-app.js
+'use strict';
+
+console.log('lala....');

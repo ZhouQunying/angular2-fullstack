@@ -1,0 +1,27 @@
+{
+  "name": "fullstack",
+  "description": "Just a fullstack test.",
+  "main": "gulpfile.babel.js",
+  "authors": [
+    "Frank"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "fullstack"
+  ],
+  "homepage": "https://github.com/ZhouQunying/fullstack",
+  "moduleType": [
+    "es6",
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.8"
+  }
+}

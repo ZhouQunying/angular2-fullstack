@@ -2,8 +2,24 @@
 <html>
 <head>
     <title></title>
+
+    <!-- build:css(client) app/vendor.css -->
+    <!-- endbuild -->
+
+    <!-- build:css({.tmp,client}) app/main.css -->
+    <link rel="stylesheet" href="app/app.css">
+    <!-- endbuild -->
 </head>
 <body>
-html
+html.
+
+<!-- build:js(client) app/vendor.js -->
+<script src="/bower_components/angular/angular.min.js"></script>
+<!-- endbuild -->
+
+<!-- build:js app/main.js -->
+<script src="app/app.js"></script>
+<!-- endbuild -->
+
 </body>
 </html>
