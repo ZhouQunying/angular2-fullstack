@@ -2,5 +2,5 @@
 .sass-cache
 .tmp
 /node_modules
-/client/bower_components
+/bower_components
 /dist

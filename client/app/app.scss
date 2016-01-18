@@ -1,7 +1,9 @@
 @import "compass/reset";
 
+$fonts: '../assets/fonts';
+
 body {
     background-color: #ccc;
-    background-image: url('../assets/images/gx.jpg');
+    background: url('../assets/images/gx.jpg') no-repeat;
     color: #000;
 }

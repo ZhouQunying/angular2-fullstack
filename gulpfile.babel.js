@@ -5,11 +5,12 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import browserSync from 'browser-sync';
 import del from 'del';
 import lazypipe from 'lazypipe';
+import mainBowerFiles from 'main-bower-files';
+import {stream as wiredep} from 'wiredep';
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
 
-// styles
 gulp.task('styles', () => {
     return gulp.src('client/**/*.scss')
         .pipe($.plumber())
@@ -29,15 +30,13 @@ gulp.task('styles', () => {
         .pipe(reload({stream: true}));
 })
 
-// javascript
 gulp.task('lint', () => {
-    return gulp.src(['**/*.js', '!node_modules/**', '!client/bower_components/**'])
+    return gulp.src(['**/*.js', '!node_modules/**', '!bower_components/**'])
         .pipe($.eslint())
         .pipe($.eslint.format())
         .pipe($.eslint.failAfterError());
 })
 
-// html
 gulp.task('html', ['styles'], () => {
     const htmlTasks = lazypipe()
         .pipe($.useref)
@@ -56,13 +55,36 @@ gulp.task('html', ['styles'], () => {
         .pipe(gulp.dest('dist/client'));
 })
 
-// images
 gulp.task('images', () => {
     return gulp.src('client/assets/images/**/*')
+        .pipe($.if($.isFile, $.cache($.imagemin({
+            progressive: true,
+            interlaced: true,
+            svgoPlugins: [{cleanupIDs: false}]
+        })).on('error', (err) => {
+            console.log(err);
+            this.end();
+        })))
+        .pipe(gulp.dest('dist/client/assets/images'));
 })
 
-// serve
-gulp.task('serve', ['serve:node', 'styles', 'serve:client']);
+gulp.task('fonts', () => {
+    const fontPaths = 'bower_components/font-awesome/fonts/**/*';
+
+    return gulp.src(mainBowerFiles({
+            filter: '**/*.{eot, svg, ttf, woff, woff2}'
+        }).concat(fontPaths))
+        .pipe(gulp.dest('.tmp/client/assets/fonts'))
+        .pipe(gulp.dest('dist/client/assets/fonts'));
+})
+
+gulp.task('clean', () => {
+    del(['.sass-cache', '.tmp', 'dist']).then(paths => {
+        console.log('Deleted files and folders:\n', paths.join('\n'));
+    });
+})
+
+gulp.task('serve', ['serve:node', 'serve:client']);
 
 gulp.task('serve:node', () => {
     $.nodemon({
@@ -73,14 +95,14 @@ gulp.task('serve:node', () => {
     });
 })
 
-gulp.task('serve:client', () => {
+gulp.task('serve:client', ['styles', 'fonts'], () => {
     browserSync.init({
         notify: false,
         port: 9000,
         server: {
             baseDir: ['.tmp/client', 'client'],
             routes: {
-                '/bower_components': 'client/bower_components'
+                '/bower_components': 'bower_components'
             }
         }
     });
@@ -89,34 +111,52 @@ gulp.task('serve:client', () => {
         'client/**/*.html',
         'client/**/*.js',
         'client/assets/images/**/*',
-        '.tmp/fonts/**/*'
+        '.tmp/client/assets/fonts/**/*'
     ]).on('change', reload);
 
     gulp.watch('client/**/*.scss', ['styles']);
+    gulp.watch('client/assets/fonts/**/*', ['fonts']);
+    gulp.watch('bower.json', ['wiredep', 'fonts']);
 })
 
-gulp.task('serve:dist', () => {
-    $.nodemon({
-        script: 'dist/server',
-        ext: 'js',
-        env: {'NODE_ENV': 'production'}
-    });
+gulp.task('test:server', () => {
+    return;
+})
+
+gulp.task('test:client', () => {
+    return;
+})
+
+gulp.task('wiredep', () => {
+    gulp.src('client/*.scss')
+        .pipe(wiredep())
+        .pipe(gulp.dest('client/app'));
+
+    gulp.src('client/*.html')
+        .pipe(wiredep())
+        .pipe(gulp.dest('client'));
+})
+
+gulp.task('build', ['lint', 'html', 'images', 'fonts'], () => {
+    return gulp.src('dist/**/*')
+        .pipe($.size({
+            title: 'build',
+            gzip: true
+        }));
+})
+
+gulp.task('default', () => {
+    // $.nodemon({
+    //     script: 'dist/server',
+    //     ext: 'js',
+    //     env: {'NODE_ENV': 'production'}
+    // });
 
     browserSync.init({
         notify: false,
         port: 9000,
         server: {
-            baseDir: ['dist/client'],
-            routes: {
-                '/bower_components': 'dist/client/bower_components'
-            }
+            baseDir: ['dist/client']
         }
     });
-})
-
-// clean
-gulp.task('clean', () => {
-    del(['.sass-cache', '.tmp', 'dist']).then(paths => {
-        console.log('Deleted files and folders:\n', paths.join('\n'));
-    });
-})
+});

@@ -1,7 +1,6 @@
 {
   "name": "fullstack",
   "description": "Just a fullstack test.",
-  "main": "gulpfile.babel.js",
   "authors": [
     "Frank"
   ],
@@ -22,6 +21,8 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.4.8"
+    "jquery": "~2.2.0",
+    "semantic": "~2.1.8",
+    "font-awesome": "Font-Awesome#~4.5.0"
   }
 }
