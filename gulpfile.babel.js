@@ -46,7 +46,9 @@ gulp.task('rev', ['styles', 'javascript'], () => {
     return gulp.src(['.tmp/client/**/*.css', '.tmp/client/**/*.js'])
         .pipe($.rev())
         .pipe(gulp.dest('.tmp/client'))
-        .pipe($.rev.manifest())
+        .pipe($.rev.manifest({
+            merge: true
+        }))
         .pipe(gulp.dest('.tmp/client'));
 })
 
