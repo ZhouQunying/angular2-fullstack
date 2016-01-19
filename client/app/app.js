@@ -1,3 +1,5 @@
 'use strict';
 
-console.log('lala....');
+import {main} from './main/main';
+
+console.log('main:' + main);

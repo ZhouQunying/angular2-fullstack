@@ -3,41 +3,54 @@
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import browserSync from 'browser-sync';
-import del from 'del';
-import lazypipe from 'lazypipe';
+import babelify from 'babelify';
+import browserify from 'browserify';
+import source from 'vinyl-source-stream';
+import buffer from 'vinyl-buffer';
 import mainBowerFiles from 'main-bower-files';
+import lazypipe from 'lazypipe';
 import {stream as wiredep} from 'wiredep';
+import del from 'del';
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
 
 gulp.task('styles', () => {
-    return gulp.src('client/**/*.scss')
-        .pipe($.plumber())
-        .pipe($.sourcemaps.init())
-        .pipe($.compass({
-            css: '.tmp/client',
-            sass: 'client',
-            image: 'client/assets/images'
-        })).on('error', (err) => {
-            console.log(err);
-            this.end();
-        })
+    return $.rubySass('client/**/*.scss', {
+            sourcemap: true,
+            compass: true
+        }).on('error', $.rubySass.logError)
         .pipe($.autoprefixer({browsers: ['last 1 version']}))
-        .pipe($.minifyCss())
-        .pipe($.sourcemaps.write('.'))
+        // .pipe($.minifyCss())
         .pipe(gulp.dest('.tmp/client'))
         .pipe(reload({stream: true}));
 })
 
-gulp.task('lint', () => {
-    return gulp.src(['**/*.js', '!node_modules/**', '!bower_components/**'])
-        .pipe($.eslint())
-        .pipe($.eslint.format())
-        .pipe($.eslint.failAfterError());
+gulp.task('javascript', () => {
+    const bundler = browserify({
+        entries: 'client/app/app.js',
+        debug: true
+    });
+
+    return $.plumber()
+        .pipe(bundler.transform("babelify", {presets: ["es2015"]}).bundle())
+        .pipe(source('app.js'))
+        .pipe(buffer())
+        .pipe($.sourcemaps.init({loadMaps: true}))
+        // .pipe($.uglify())
+        .pipe($.sourcemaps.write())
+        .pipe(gulp.dest('.tmp/client/app'));
 })
 
-gulp.task('html', ['styles'], () => {
+gulp.task('rev', ['styles', 'javascript'], () => {
+    return gulp.src(['.tmp/client/**/*.css', '.tmp/client/**/*.js'])
+        .pipe($.rev())
+        .pipe(gulp.dest('.tmp/client'))
+        .pipe($.rev.manifest())
+        .pipe(gulp.dest('.tmp/client'));
+})
+
+gulp.task('html', ['rev'], () => {
     const htmlTasks = lazypipe()
         .pipe($.useref)
         .pipe(() => {
@@ -69,13 +82,30 @@ gulp.task('images', () => {
 })
 
 gulp.task('fonts', () => {
-    const fontPaths = 'bower_components/font-awesome/fonts/**/*';
+    const fontPaths = 'client/assets/fonts/**/*';
 
     return gulp.src(mainBowerFiles({
             filter: '**/*.{eot, svg, ttf, woff, woff2}'
         }).concat(fontPaths))
         .pipe(gulp.dest('.tmp/client/assets/fonts'))
         .pipe(gulp.dest('dist/client/assets/fonts'));
+})
+
+gulp.task('wiredep', () => {
+    gulp.src('client/*.scss')
+        .pipe(wiredep())
+        .pipe(gulp.dest('client/app'));
+
+    gulp.src('client/*.html')
+        .pipe(wiredep())
+        .pipe(gulp.dest('client'));
+})
+
+gulp.task('lint', () => {
+    return gulp.src(['**/*.js', '!node_modules/**', '!bower_components/**'])
+        .pipe($.eslint())
+        .pipe($.eslint.format())
+        .pipe($.eslint.failAfterError());
 })
 
 gulp.task('clean', () => {
@@ -90,15 +120,15 @@ gulp.task('serve:node', () => {
     $.nodemon({
         script: 'server',
         ext: 'js',
-        ignore: ['client/**/*.js'],
+        ignore: ['client/**/*.js', '*.js'],
         env: {'NODE_ENV': 'development'}
     });
 })
 
-gulp.task('serve:client', ['styles', 'fonts'], () => {
+gulp.task('serve:client', ['styles', 'javascript', 'fonts'], () => {
     browserSync.init({
         notify: false,
-        port: 9000,
+        port: 3000,
         server: {
             baseDir: ['.tmp/client', 'client'],
             routes: {
@@ -115,6 +145,7 @@ gulp.task('serve:client', ['styles', 'fonts'], () => {
     ]).on('change', reload);
 
     gulp.watch('client/**/*.scss', ['styles']);
+    gulp.watch('client/**/*.js', ['javascript']);
     gulp.watch('client/assets/fonts/**/*', ['fonts']);
     gulp.watch('bower.json', ['wiredep', 'fonts']);
 })
@@ -127,17 +158,15 @@ gulp.task('test:client', () => {
     return;
 })
 
-gulp.task('wiredep', () => {
-    gulp.src('client/*.scss')
-        .pipe(wiredep())
-        .pipe(gulp.dest('client/app'));
+gulp.task('build', ['build:server', 'build:client']);
 
-    gulp.src('client/*.html')
-        .pipe(wiredep())
-        .pipe(gulp.dest('client'));
+gulp.task('build:server', () => {
+    return gulp.src('server/**/*.js')
+        .pipe($.babel())
+        .pipe(gulp.dest('dist/server'));
 })
 
-gulp.task('build', ['lint', 'html', 'images', 'fonts'], () => {
+gulp.task('build:client', ['lint', 'html', 'images', 'fonts'], () => {
     return gulp.src('dist/**/*')
         .pipe($.size({
             title: 'build',
@@ -145,16 +174,16 @@ gulp.task('build', ['lint', 'html', 'images', 'fonts'], () => {
         }));
 })
 
-gulp.task('default', () => {
-    // $.nodemon({
-    //     script: 'dist/server',
-    //     ext: 'js',
-    //     env: {'NODE_ENV': 'production'}
-    // });
+gulp.task('default', ['build'], () => {
+    $.nodemon({
+        script: 'dist/server',
+        ext: 'js',
+        env: {'NODE_ENV': 'production'}
+    });
 
     browserSync.init({
         notify: false,
-        port: 9000,
+        port: 3000,
         server: {
             baseDir: ['dist/client']
         }

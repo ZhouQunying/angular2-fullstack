@@ -1,3 +1,6 @@
+// bower:scss
+// endbower
+
 @import "compass/reset";
 
 $fonts: '../assets/fonts';
@@ -6,4 +9,12 @@ body {
     background-color: #ccc;
     background: url('../assets/images/gx.jpg') no-repeat;
     color: #000;
+}
+
+@font-face {
+   font-family: fontname;
+   src: $fonts;
+}
+body{
+    font-family: fontname;
 }
