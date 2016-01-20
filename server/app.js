@@ -5,6 +5,6 @@ import express from 'express';
 var app = express();
 
 app.get('/', function (req, res) {
-    res.send('Hesdfllo');
+    res.send('Hello');
 });
 app.listen(9000);

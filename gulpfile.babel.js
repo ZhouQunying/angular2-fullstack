@@ -26,7 +26,7 @@ gulp.task('styles', () => {
         .pipe(reload({stream: true}));
 })
 
-gulp.task('javascript', () => {
+gulp.task('javascript', ['lint'], () => {
     const bundler = browserify({
         entries: 'client/app/app.js',
         debug: true
@@ -36,38 +36,10 @@ gulp.task('javascript', () => {
         .pipe(bundler.transform("babelify", {presets: ["es2015"]}).bundle())
         .pipe(source('app.js'))
         .pipe(buffer())
-        .pipe($.sourcemaps.init({loadMaps: true}))
+        // .pipe($.sourcemaps.init({loadMaps: true}))
         // .pipe($.uglify())
-        .pipe($.sourcemaps.write())
+        // .pipe($.sourcemaps.write())
         .pipe(gulp.dest('.tmp/client/app'));
-})
-
-gulp.task('rev', ['styles', 'javascript'], () => {
-    return gulp.src(['.tmp/client/**/*.css', '.tmp/client/**/*.js'])
-        .pipe($.rev())
-        .pipe(gulp.dest('.tmp/client'))
-        .pipe($.rev.manifest({
-            merge: true
-        }))
-        .pipe(gulp.dest('.tmp/client'));
-})
-
-gulp.task('html', ['rev'], () => {
-    const htmlTasks = lazypipe()
-        .pipe($.useref)
-        .pipe(() => {
-            return $.if('*.js', $.uglify());
-        })
-        .pipe(() => {
-            return $.if('*.css', $.minifyCss({compatibility: '*'}));
-        })
-        .pipe(() => {
-            return $.if('*.html', $.minifyHtml());
-        });
-
-    return gulp.src('client/*.html')
-        .pipe(htmlTasks())
-        .pipe(gulp.dest('dist/client'));
 })
 
 gulp.task('images', () => {
@@ -89,8 +61,24 @@ gulp.task('fonts', () => {
     return gulp.src(mainBowerFiles({
             filter: '**/*.{eot, svg, ttf, woff, woff2}'
         }).concat(fontPaths))
-        .pipe(gulp.dest('.tmp/client/assets/fonts'))
         .pipe(gulp.dest('dist/client/assets/fonts'));
+})
+
+gulp.task('html', ['styles', 'javascript'], () => {
+    return gulp.src('client/*.html')
+        .pipe($.useref())
+        .pipe($.if('*.js', $.uglify()))
+        .pipe($.if('*.css', $.minifyCss({compatibility: '*'})))
+        .pipe($.if('*.html', $.minifyHtml()))
+        .pipe(gulp.dest('dist/client'));
+})
+
+gulp.task('inject', ['styles', 'javascript'], () => {
+    const sources = gulp.src(['.tmp/client/**/*.css', '.tmp/client/**/*.js'], {read: false});
+
+    return gulp.src('client/**/*.html')
+        .pipe($.inject(sources, {relative: true}))
+        .pipe(gulp.dest('client'));
 })
 
 gulp.task('wiredep', () => {
@@ -116,18 +104,18 @@ gulp.task('clean', () => {
     });
 })
 
-gulp.task('serve', ['serve:node', 'serve:client']);
+gulp.task('serve', ['serve:client']);
 
 gulp.task('serve:node', () => {
     $.nodemon({
         script: 'server',
         ext: 'js',
-        ignore: ['client/**/*.js', '*.js'],
+        ignore: ['client/**/*.js', 'gulpfile.babel.js'],
         env: {'NODE_ENV': 'development'}
     });
 })
 
-gulp.task('serve:client', ['styles', 'javascript', 'fonts'], () => {
+gulp.task('serve:client', ['serve:node', 'html'], () => {
     browserSync.init({
         notify: false,
         port: 3000,
@@ -142,12 +130,10 @@ gulp.task('serve:client', ['styles', 'javascript', 'fonts'], () => {
     gulp.watch([
         'client/**/*.html',
         'client/**/*.js',
-        'client/assets/images/**/*',
-        '.tmp/client/assets/fonts/**/*'
+        'client/assets/**/*'
     ]).on('change', reload);
 
-    gulp.watch('client/**/*.scss', ['styles']);
-    gulp.watch('client/**/*.js', ['javascript']);
+    gulp.watch(['client/**/*.scss', 'client/**/*.js'], ['html']);
     gulp.watch('client/assets/fonts/**/*', ['fonts']);
     gulp.watch('bower.json', ['wiredep', 'fonts']);
 })
@@ -163,12 +149,12 @@ gulp.task('test:client', () => {
 gulp.task('build', ['build:server', 'build:client']);
 
 gulp.task('build:server', () => {
-    return gulp.src('server/**/*.js')
-        .pipe($.babel())
+    return gulp.src('server/**/*')
+        .pipe($.if('*.js', $.babel()))
         .pipe(gulp.dest('dist/server'));
 })
 
-gulp.task('build:client', ['lint', 'html', 'images', 'fonts'], () => {
+gulp.task('build:client', ['html', 'images', 'fonts'], () => {
     return gulp.src('dist/**/*')
         .pipe($.size({
             title: 'build',
