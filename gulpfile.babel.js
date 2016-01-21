@@ -64,7 +64,7 @@ gulp.task('fonts', () => {
         .pipe(gulp.dest('dist/client/assets/fonts'));
 })
 
-gulp.task('html', ['styles', 'javascript'], () => {
+gulp.task('html', ['styles', 'inject'], () => {
     return gulp.src('client/*.html')
         .pipe($.useref())
         .pipe($.if('*.js', $.uglify()))
@@ -73,11 +73,15 @@ gulp.task('html', ['styles', 'javascript'], () => {
         .pipe(gulp.dest('dist/client'));
 })
 
-gulp.task('inject', ['styles', 'javascript'], () => {
-    const sources = gulp.src(['.tmp/client/**/*.css', '.tmp/client/**/*.js'], {read: false});
+gulp.task('inject', ['javascript'], () => {
+    const sources = gulp.src('.tmp/client/**/*.js', {read: false});
 
     return gulp.src('client/**/*.html')
-        .pipe($.inject(sources, {relative: true}))
+        .pipe($.inject(sources, {transform: (filePath) => {
+                let filePath = filePath.replace('/.tmp/client', '');
+                return '<script src="' + filePath + '"></script>';
+            }
+        }))
         .pipe(gulp.dest('client'));
 })
 
@@ -133,7 +137,8 @@ gulp.task('serve:client', ['serve:node', 'html'], () => {
         'client/assets/**/*'
     ]).on('change', reload);
 
-    gulp.watch(['client/**/*.scss', 'client/**/*.js'], ['html']);
+    gulp.watch('client/**/*.scss', ['styles']);
+    gulp.watch('client/**/*.js', ['javascript']);
     gulp.watch('client/assets/fonts/**/*', ['fonts']);
     gulp.watch('bower.json', ['wiredep', 'fonts']);
 })
