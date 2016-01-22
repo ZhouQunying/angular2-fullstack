@@ -5,12 +5,6 @@
 
 $fonts: '../assets/fonts';
 
-body {
-    background-color: #ccc;
-    background: url('../assets/images/gx.jpg') no-repeat;
-    color: #000;
-}
-
 @font-face {
    font-family: fontname;
    src: $fonts;
@@ -18,3 +12,14 @@ body {
 body{
     font-family: fontname;
 }
+
+body {
+    background-color: #ccc;
+    background: url('../assets/images/gx.jpg') no-repeat;
+    color: #000;
+}
+
+/* inject:scss */
+@import "main/main.scss";
+@import "../components/footer/footer.scss";
+/* endinject */
