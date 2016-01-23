@@ -5,8 +5,6 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import browserSync from 'browser-sync';
 import babelify from 'babelify';
 import browserify from 'browserify';
-import watchify from 'watchify';
-import lodash from 'lodash';
 import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 import mainBowerFiles from 'main-bower-files';
@@ -30,12 +28,12 @@ gulp.task('styles', ['inject:scss'], () => {
         .pipe(reload({stream: true}));
 })
 
-const bundler = watchify(browserify(lodash.assign({}, watchify.args, {
-    entries: 'client/app/app.js',
-    debug: true
-})));
+gulp.task('javascript', () => {
+    const bundler = browserify({
+        entries: 'client/app/app.js',
+        debug: true
+    });
 
-function bundle() {
     return $.plumber()
         .pipe(bundler.transform('babelify', {presets: ['es2015']}).bundle()
             .on('error', (err) => {
@@ -46,11 +44,9 @@ function bundle() {
         .pipe($.sourcemaps.init({loadMaps: true}))
         // .pipe($.uglify())
         .pipe($.sourcemaps.write())
-        .pipe(gulp.dest('.tmp/client/app'));
-}
-
-gulp.task('javascript', bundle);
-bundler.on('update', bundle);
+        .pipe(gulp.dest('.tmp/client/app'))
+        .pipe(reload({stream: true}));
+})
 
 gulp.task('images', () => {
     return gulp.src('client/assets/images/**/*')
@@ -141,7 +137,7 @@ gulp.task('serve', ['serve:node', 'html'], () => {
 
     gulp.watch([
         'client/**/*.html',
-        'client/**/*.js',
+        // 'client/**/*.js',
         'client/assets/**/*'
     ]).on('change', reload);
 
