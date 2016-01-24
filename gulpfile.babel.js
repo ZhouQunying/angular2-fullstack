@@ -5,6 +5,7 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import browserSync from 'browser-sync';
 import babelify from 'babelify';
 import browserify from 'browserify';
+import watchify from 'watchify';
 import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 import mainBowerFiles from 'main-bower-files';
@@ -16,7 +17,7 @@ const reload = browserSync.reload;
 
 gulp.task('styles', ['inject:scss'], () => {
     return $.rubySass('client/app/app.scss', {
-            sourcemap: true,
+            // sourcemap: true,
             compass: true,
             style: 'expanded'
         }).on('error', $.rubySass.logError)
@@ -29,16 +30,13 @@ gulp.task('styles', ['inject:scss'], () => {
 })
 
 gulp.task('javascript', () => {
-    const bundler = browserify({
-        entries: 'client/app/app.js',
-        debug: true
-    });
+    const bundler = watchify(browserify('client/app/app.js', {debug: true})
+        .transform('babelify', {presets: ['es2015']}));
 
-    return $.plumber()
-        .pipe(bundler.transform('babelify', {presets: ['es2015']}).bundle()
-            .on('error', (err) => {
-                console.log(err);
-            }))
+    bundler.bundle()
+        .on('error', (err) => {
+            console.log(err);
+        })
         .pipe(source('app.js'))
         .pipe(buffer())
         .pipe($.sourcemaps.init({loadMaps: true}))
@@ -76,6 +74,8 @@ gulp.task('html', ['styles', 'javascript'], () => {
         .pipe($.if('*.js', $.uglify()))
         .pipe($.if('*.css', $.minifyCss({compatibility: '*'})))
         .pipe($.if('*.html', $.minifyHtml()))
+        .pipe($.rev())
+        .pipe($.revReplace())
         .pipe(gulp.dest('dist/client'));
 })
 
@@ -108,8 +108,11 @@ gulp.task('lint', () => {
 })
 
 gulp.task('copy', () => {
-    return gulp.src(['bower.json', 'package.json'])
+    gulp.src(['bower.json', 'package.json'])
         .pipe(gulp.dest('dist'));
+
+    gulp.src(['server/**/*', '!server/**/*.js'])
+        .pipe(gulp.dest('dist/server'));
 })
 
 gulp.task('copy:server', () => {
@@ -137,7 +140,6 @@ gulp.task('serve', ['serve:node', 'html'], () => {
 
     gulp.watch([
         'client/**/*.html',
-        // 'client/**/*.js',
         'client/assets/**/*'
     ]).on('change', reload);
 
