@@ -48,6 +48,7 @@
     "gulp-uglify": "^1.5.1",
     "gulp-useref": "^3.0.4",
     "install": "^0.4.1",
+    "loadsh": "^4.0.0",
     "main-bower-files": "^2.11.1",
     "npm": "^3.5.3",
     "vinyl-buffer": "^1.0.0",

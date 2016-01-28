@@ -21,8 +21,12 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.2.0",
-    "semantic": "~2.1.8",
-    "font-awesome": "Font-Awesome#~4.5.0"
+    "angular": "~1.4.9",
+    "angular-ui-router": "~0.2.16",
+    "angular-cookies": "~1.4.9",
+    "angular-resource": "~1.4.9",
+    "angular-sanitize": "~1.4.9",
+    "angular-socket-io": "~0.7.0",
+    "angular-validation-match": "~1.7.1"
   }
 }

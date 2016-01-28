@@ -15,11 +15,11 @@ body{
 
 body {
     background-color: #ccc;
-    background: url('../assets/images/gx.jpg') no-repeat;
+    // background: url('../assets/images/gx.jpg') no-repeat;
     color: #000;
 }
 
 /* inject:scss */
-@import "main/main.scss";
 @import "../components/footer/footer.scss";
+@import "main/main.scss";
 /* endinject */

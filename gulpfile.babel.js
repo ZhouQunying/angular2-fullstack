@@ -8,6 +8,7 @@ import browserify from 'browserify';
 import watchify from 'watchify';
 import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
+import {assign} from 'loadsh';
 import mainBowerFiles from 'main-bower-files';
 import {stream as wiredep} from 'wiredep';
 import del from 'del';
@@ -29,22 +30,44 @@ gulp.task('styles', ['inject:scss'], () => {
         .pipe(reload({stream: true}));
 })
 
-gulp.task('javascript', () => {
-    const bundler = watchify(browserify('client/app/app.js', {debug: true})
-        .transform('babelify', {presets: ['es2015']}));
+// gulp.task('javascript', () => {
+//     let bundler = watchify(browserify('client/app/app.js', {debug: true})
+//         .transform('babelify', {presets: ['es2015']}));
 
+//     bundler.bundle()
+//         .on('error', (err) => {
+//             console.log(err);
+//         })
+//         .pipe(source('app.js'))
+//         .pipe(buffer())
+//         .pipe($.sourcemaps.init({loadMaps: true}))
+//         // .pipe($.uglify())
+//         .pipe($.sourcemaps.write())
+//         .pipe(gulp.dest('.tmp/client/app'))
+//         .pipe(reload({stream: true}));
+// })
+
+let bundler = watchify(browserify(assign({}, watchify.args, {
+        entries: ['client/app/app.js'],
+        debug: true
+    })).transform('babelify', {presets: ['es2015']}));
+        
+function bundle() {
     bundler.bundle()
         .on('error', (err) => {
             console.log(err);
         })
         .pipe(source('app.js'))
         .pipe(buffer())
-        .pipe($.sourcemaps.init({loadMaps: true}))
+        // .pipe($.sourcemaps.init({loadMaps: true}))
         // .pipe($.uglify())
-        .pipe($.sourcemaps.write())
+        // .pipe($.sourcemaps.write())
         .pipe(gulp.dest('.tmp/client/app'))
         .pipe(reload({stream: true}));
-})
+}
+
+gulp.task('javascript', bundle);
+bundler.on('update', bundle);
 
 gulp.task('images', () => {
     return gulp.src('client/assets/images/**/*')
@@ -60,7 +83,7 @@ gulp.task('images', () => {
 })
 
 gulp.task('fonts', () => {
-    const fontPaths = 'client/assets/fonts/**/*';
+    let fontPaths = 'client/assets/fonts/**/*';
 
     return gulp.src(mainBowerFiles({
             filter: '**/*.{eot, svg, ttf, woff, woff2}'
@@ -68,7 +91,7 @@ gulp.task('fonts', () => {
         .pipe(gulp.dest('dist/client/assets/fonts'));
 })
 
-gulp.task('html', ['styles', 'javascript'], () => {
+gulp.task('html', ['styles'], () => {
     return gulp.src('client/*.html')
         .pipe($.useref())
         .pipe($.if('*.js', $.uglify()))
@@ -90,7 +113,7 @@ gulp.task('wiredep', () => {
 })
 
 gulp.task('inject:scss', () => {
-    const scssSources = gulp.src('client/**/*.scss', {read: false});
+    let scssSources = gulp.src('client/**/*.scss', {read: false});
 
     return gulp.src('client/app/app.scss')
         .pipe($.inject(scssSources, {
@@ -115,18 +138,13 @@ gulp.task('copy', () => {
         .pipe(gulp.dest('dist/server'));
 })
 
-gulp.task('copy:server', () => {
-    return gulp.src(['server/**/*', '!server/**/*.js'])
-        .pipe(gulp.dest('dist/server'));
-})
-
 gulp.task('clean', () => {
     del(['.sass-cache', '.tmp', 'dist']).then(paths => {
         console.log('Deleted files and folders:\n', paths.join('\n'));
     });
 })
 
-gulp.task('serve', ['serve:node', 'html'], () => {
+gulp.task('serve', ['serve:node', 'javascript', 'html'], () => {
     browserSync.init({
         notify: false,
         port: 3000,
@@ -144,7 +162,7 @@ gulp.task('serve', ['serve:node', 'html'], () => {
     ]).on('change', reload);
 
     gulp.watch('client/**/*.scss', ['styles']);
-    gulp.watch('client/**/*.js', ['javascript']);
+    // gulp.watch('client/**/*.js', ['javascript']);
     gulp.watch('bower.json', ['wiredep', 'fonts']);
 });
 
