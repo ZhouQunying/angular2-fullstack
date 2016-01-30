@@ -4,7 +4,9 @@ import express from 'express';
 
 var app = express();
 
-app.get('/', function (req, res) {
-    res.send('Hello');
+app.get('/main', function (req, res) {
+    res.send({
+        'name': 'Lala'
+    });
 });
-app.listen(9000);
+app.listen(9099);

@@ -20,6 +20,6 @@ body {
 }
 
 /* inject:scss */
-@import "../components/footer/footer.scss";
 @import "main/main.scss";
+@import "../components/footer/footer.scss";
 /* endinject */

@@ -20,13 +20,5 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-    "angular": "~1.4.9",
-    "angular-ui-router": "~0.2.16",
-    "angular-cookies": "~1.4.9",
-    "angular-resource": "~1.4.9",
-    "angular-sanitize": "~1.4.9",
-    "angular-socket-io": "~0.7.0",
-    "angular-validation-match": "~1.7.1"
-  }
+  "dependencies": {}
 }

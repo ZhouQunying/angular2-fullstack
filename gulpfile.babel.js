@@ -48,13 +48,13 @@ gulp.task('styles', ['inject:scss'], () => {
 // })
 
 let bundler = watchify(browserify(assign({}, watchify.args, {
-        entries: ['client/app/app.js'],
+        entries: ['client/app/index.js'],
         debug: true
     })).transform('babelify', {presets: ['es2015']}));
         
 function bundle() {
     bundler.bundle()
-        .on('error', (err) => {
+        .on('error', err => {
             console.log(err);
         })
         .pipe(source('app.js'))
@@ -75,7 +75,7 @@ gulp.task('images', () => {
             progressive: true,
             interlaced: true,
             svgoPlugins: [{cleanupIDs: false}]
-        })).on('error', (err) => {
+        })).on('error', err => {
             console.log(err);
             this.end();
         })))
