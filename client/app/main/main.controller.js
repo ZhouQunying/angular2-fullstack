@@ -19,6 +19,6 @@ import fullstackApp from '../app';
 
 export default fullstackApp.controller('MainController', ['$scope', '$http', ($scope, $http) => {
         $http.get('http://localhost:9099/main').then(res => {
-            $scope.main = res.data;
+            $scope.data = res.data;
         })
     }]);
