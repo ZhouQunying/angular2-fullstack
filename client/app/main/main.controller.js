@@ -15,8 +15,6 @@
 // export default angular.module('fullstackApp')
 //     .controller('MainController', MainController);
 
-import fullstackApp from '../app';
-
 export default fullstackApp.controller('MainController', ['$scope', '$http', ($scope, $http) => {
         $http.get('http://localhost:9099/main').then(res => {
             $scope.data = res.data;

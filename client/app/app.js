@@ -1,5 +1,5 @@
 'use strict';
 
-export default angular.module('fullstackApp', [
+export default window.fullstackApp = angular.module('fullstackApp', [
         'ui.router'
     ]);

@@ -13,9 +13,13 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.set('views', '../client')
+app.set('view engine', 'jade');
+
 app.get('/main', function (req, res) {
     res.send({
-        'name': 'My name is Lala.'
-    });
+        'name': 'My name is lala.'
+    })
 });
+
 app.listen(9099);
