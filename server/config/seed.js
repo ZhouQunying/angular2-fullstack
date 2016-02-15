@@ -10,11 +10,13 @@ User.find({}).removeAsync()
     .then(() => {
         User.createAsync({
             name: 'Test User',
-            password: 'test'
+            password: 'test',
+            email: 'email@email.com'
         }, {
             role: 'admin',
             name: 'admin',
-            password: 'admin'
+            password: 'admin',
+            email: 'email@email.com'
         })
         .then(() => {
             console.log('finished populate users');
