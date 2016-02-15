@@ -2,13 +2,14 @@
 
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
+import runSequence from 'run-sequence';
 import browserSync from 'browser-sync';
 import babelify from 'babelify';
 import browserify from 'browserify';
 import watchify from 'watchify';
 import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
-import {assign} from 'loadsh';
+import {assign} from 'lodash';
 import mainBowerFiles from 'main-bower-files';
 import {stream as wiredep} from 'wiredep';
 import del from 'del';
@@ -29,23 +30,6 @@ gulp.task('styles', ['inject:scss'], () => {
         .pipe(gulp.dest('.tmp/client/app'))
         .pipe(reload({stream: true}));
 })
-
-// gulp.task('javascript', () => {
-//     let bundler = watchify(browserify('client/app/app.js', {debug: true})
-//         .transform('babelify', {presets: ['es2015']}));
-
-//     bundler.bundle()
-//         .on('error', (err) => {
-//             console.log(err);
-//         })
-//         .pipe(source('app.js'))
-//         .pipe(buffer())
-//         .pipe($.sourcemaps.init({loadMaps: true}))
-//         // .pipe($.uglify())
-//         .pipe($.sourcemaps.write())
-//         .pipe(gulp.dest('.tmp/client/app'))
-//         .pipe(reload({stream: true}));
-// })
 
 let bundler = watchify(browserify(assign({}, watchify.args, {
         entries: ['client/app/index.js'],
@@ -69,6 +53,15 @@ function bundle() {
 gulp.task('javascript', bundle);
 bundler.on('update', bundle);
 
+// gulp.task('javascript:build', () => {
+//     let bundler = browserify(assign({}, watchify.args, {
+//         entries: ['client/app/index.js'],
+//         debug: true
+//     })).transform('babelify', {presets: ['es2015']});
+
+//     bundle();
+// })
+
 gulp.task('images', () => {
     return gulp.src('client/assets/images/**/*')
         .pipe($.if($.isFile, $.cache($.imagemin({
@@ -91,7 +84,7 @@ gulp.task('fonts', () => {
         .pipe(gulp.dest('dist/client/assets/fonts'));
 })
 
-gulp.task('html', ['styles'], () => {
+gulp.task('html', ['styles', 'javascript'], () => {
     return gulp.src('client/*.html')
         .pipe($.useref())
         .pipe($.if('*.js', $.uglify()))
@@ -144,7 +137,7 @@ gulp.task('clean', () => {
     });
 })
 
-gulp.task('serve', ['serve:node', 'javascript', 'html'], () => {
+gulp.task('serve', ['serve:node', 'html'], () => {
     browserSync.init({
         notify: false,
         port: 3000,
@@ -162,8 +155,7 @@ gulp.task('serve', ['serve:node', 'javascript', 'html'], () => {
     ]).on('change', reload);
 
     gulp.watch('client/**/*.scss', ['styles']);
-    // gulp.watch('client/**/*.js', ['javascript']);
-    gulp.watch('bower.json', ['wiredep', 'fonts']);
+    gulp.watch('bower.json', ['wiredep']);
 });
 
 gulp.task('serve:node', () => {
