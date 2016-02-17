@@ -1,5 +1,7 @@
 'use strict';
 
 import crypto from 'crypto';
-var mongoose = require('bluebird').promisifyAll(require('mongoose'));
+import Promise from 'bluebird';
+var mongoose = Promise.promisifyAll(require('mongoose'));
 import {Schema} from 'mongoose';
+
