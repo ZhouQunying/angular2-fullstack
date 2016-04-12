@@ -1,4 +1,6 @@
-# fullstack
-练手全栈Demo项目
+# Fullstack project
+  This is a MEAN project.
+> Using MongoDB, Express, AngularJS, and Node, using ES6, gulp for automate workflow, and Sass grade CSS extension. And of course HTML5 CSS3.
 
-所用技术：ES6 Mongodb Node Express Angularjs Gulp
+## More
+  Coming soon.
