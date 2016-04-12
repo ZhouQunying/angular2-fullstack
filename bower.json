@@ -9,16 +9,10 @@
     "fullstack"
   ],
   "homepage": "https://github.com/ZhouQunying/fullstack",
-  "moduleType": [
-    "es6",
-    "node"
-  ],
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "bower_components"
   ],
   "dependencies": {}
 }
