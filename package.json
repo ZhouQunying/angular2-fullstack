@@ -1,36 +1,24 @@
 {
   "name": "fullstack",
   "version": "1.0.0",
-  "description": "Just a fullstack test.",
-  "main": "gulpfile.babel.js",
+  "description": "This is a MEAN project. > Using MongoDB, Express, AngularJS, and Node, using ES6, gulp for automate workflow, and Sass grade CSS extension. And of course HTML5 CSS3.",
+  "main": "server/app.js",
+  "dependencies": {
+    "gulp-load-plugins": "^1.2.2",
+    "gulp-run-sequence": "^0.3.2"
+  },
+  "devDependencies": {},
   "scripts": {
-    "test": "npm test"
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ZhouQunying/fullstack.git"
   },
-  "keywords": [
-    "fullstack"
-  ],
   "author": "Frank",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/ZhouQunying/fullstack/issues"
   },
-  "homepage": "https://github.com/ZhouQunying/fullstack#readme",
-  "devDependencies": {},
-  "dependencies": {},
-  "babel": {
-    "presets": [
-      "es2015"
-    ]
-  },
-  "eslintConfig": {
-    "env": {
-      "node": true,
-      "browser": true
-    },
-    "parser": "babel-eslint"
-  }
+  "homepage": "https://github.com/ZhouQunying/fullstack#readme"
 }
