@@ -12,7 +12,10 @@ const paths = {
     scripts: 'client/**/!(*.spec|*.mock).js',
     mainStyle: 'client/app/app.scss',
   },
-  server: {},
+  server: {
+    scripts: 'server/**/!(*.spec|*.intergration).js', //
+    json: 'server/**/*.json'
+  },
   dist: 'dist'
 };
 const $ = gulpLoadPlugins();
@@ -23,7 +26,7 @@ let styles = lazypipe()
   .pipe($.autoprefixer, {browsers: ['last 1 version']})
   .pipe($.sourcemaps.write, '.');
 
-let es6 = lazypipe()
+let transpileClient = lazypipe()
   .pipe($.sourcemaps.init)
   .pipe($.babel)
   .pipe($.sourcemaps.write, '.');
@@ -99,6 +102,12 @@ gulp.task('styles', () => {
 
 gulp.task('es6:client', () => {
   return gulp.src(paths.client.scripts)
-    .pipe(es6())
-    .pipe(gulp.dest('.tmp/'));
+    .pipe(transpileClient())
+    .pipe(gulp.dest('.tmp'));
+});
+
+gulp.task('es6:server', () => {
+  return gulp.src(_.union([paths.server.scripts], [paths.server.json]))
+    .pipe(transpileServer())
+    .pipw(gulp.dest('dist/server'));
 });
