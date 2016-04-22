@@ -9,12 +9,17 @@ const paths = {
   client: {
     indexView: 'client/index.html',
     styles: 'client/{app,components}/**/*.scss',
-    scripts: 'client/**/!(*.spec|*.mock).js',
     mainStyle: 'client/app/app.scss',
+    scripts: 'client/**/!(*.spec|*.mock).js',
+    test: 'client/{app,components}/**/*.{spec,mock}.js'
   },
   server: {
-    scripts: 'server/**/!(*.spec|*.intergration).js', //
-    json: 'server/**/*.json'
+    scripts: 'server/**/!(*.spec|*.intergration).js',
+    json: 'server/**/*.json',
+    test: {
+      intergration: 'server/**/*.intergration.js',
+      unit: 'server/**/*.spec.js'
+    }
   },
   dist: 'dist'
 };
@@ -28,8 +33,32 @@ let styles = lazypipe()
 
 let transpileClient = lazypipe()
   .pipe($.sourcemaps.init)
-  .pipe($.babel)
+  .pipe($.babel, {
+    plugins: [
+      'transform-class-properties'
+    ]
+  })
   .pipe($.sourcemaps.write, '.');
+
+let transplieServer = lazypipe()
+  .pipe($.sourcemaps.init)
+  .pipe($.bable, {
+    plugins: [
+      'transform-class-properties',
+      'transform-runtime'
+    ]
+  })
+  .pipe($.sourcemaps.write, '.');
+
+let lintScriptClient = lazypipe()
+  .pipe($.eslint)
+  .pipe($.eslint.format)
+  .pipe($.eslint.failAfterError);
+
+let lintScriptServer = lazypipe()
+  .pipe($.eslint)
+  .pipe($.eslint.format)
+  .pipe($.eslint.failAfterError);
 
 // inject *.module.js sort
 function sortModulesTop (file1, file2) {
@@ -51,9 +80,7 @@ function sortModulesTop (file1, file2) {
   }
 }
 
-gulp.task('inject', cb => {
-  $.runSequence(['inject:js', 'inject:scss'], cb);
-});
+gulp.task('inject', cb => $.runSequence(['inject:js', 'inject:scss'], cb));
 
 gulp.task('inject:js', () => {
   return gulp.src(paths.client.indexView)
@@ -110,4 +137,16 @@ gulp.task('es6:server', () => {
   return gulp.src(_.union([paths.server.scripts], [paths.server.json]))
     .pipe(transpileServer())
     .pipw(gulp.dest('dist/server'));
+});
+
+gulp.task('lint:scripts', cb => runSequence(['lint:scripts:client', 'lint:scripts:server'], cb));
+
+gulp.task('lint:scripts:client', () => {
+  return gulp.src(_.union([paths.client.scripts], _.map([paths.client.test], blob => '!' + blob)))
+    .pipe(lintScriptClient());
+});
+
+gulp.task('lint:scripts:server', () => {
+  return gulp.src(_.union([paths.server.scripts], _.map([paths.server.test], blob => '!' + blob)))
+    .pipe(lintScriptServer());
 });
