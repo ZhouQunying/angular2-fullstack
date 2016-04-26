@@ -4,6 +4,7 @@ import gulp from 'gulp';
 import _ from 'lodash';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import lazypipe from 'lazypipe';
+import nodemon from 'nodemon';
 
 const paths = {
   client: {
@@ -80,6 +81,19 @@ function sortModulesTop (file1, file2) {
   }
 }
 
+// call pate until first success
+function whenServerReady (cb) => {
+  let serverReady = false;
+}
+
+// server log
+function onServerLog (log) {
+  console.log($.util.colors.white('[') +
+    $.util.colors.yellow('nodemon') +
+    $.util.colors.white(']') +
+    log.message);
+}
+
 gulp.task('inject', cb => $.runSequence(['inject:js', 'inject:scss'], cb));
 
 gulp.task('inject:js', () => {
@@ -149,4 +163,37 @@ gulp.task('lint:scripts:client', () => {
 gulp.task('lint:scripts:server', () => {
   return gulp.src(_.union([paths.server.scripts], _.map([paths.server.test], blob => '!' + blob)))
     .pipe(lintScriptServer());
+});
+
+gulp.task('lint:script:clientTest', => {
+  return gulp.src(paths.client.test)
+    .pipe(lintScriptClient());
+});
+
+gulp.task('lint:script:serverTest', => {
+  return gulp.src(paths.server.test)
+    .pipe(lintScriptServer());
+});
+
+gulp.task('clean', () => del(['.tmp/**/*'], {dot: true}));
+
+gulp.task('start:client', cb => {
+  whenServerReady(() => {
+    open('http://localhost:' + config.port);
+    cb();
+  });
+});
+
+gulp.task('start:server:dev', () => {
+  process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+  config = require('./server/config/environment');
+  nodemon('--watch server server')
+    .on('log', onServerLog);
+});
+
+gulp.task('start:server:prod', () => {
+  process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+  config = require(`${paths.dist}/server/config/environment`);
+  nodemon('--watch server server')
+    .on('log', onserverLog);
 });
