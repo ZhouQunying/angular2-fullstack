@@ -46,7 +46,7 @@
     if (vm.pageConf.sort) {
       try {
         vm.sorts = angular.fromJson(vm.pageConf.sort);
-      } catch (_error) {
+      } catch (_error) {sadf
       }
     } else {
       vm.sorts = ['-create_at'];
