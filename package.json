@@ -22,7 +22,8 @@
     "gulp-sourcemaps": "^2.0.0-alpha",
     "gulp-watch": "^4.3.5",
     "lazypipe": "^1.0.1",
-    "nodemon": "^1.9.1"
+    "nodemon": "^1.9.1",
+    "wiredep": "^4.0.0"
   },
   "scripts": {
     "test": "gulp test"

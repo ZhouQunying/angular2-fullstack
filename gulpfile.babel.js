@@ -6,24 +6,28 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import lazypipe from 'lazypipe';
 import nodemon from 'nodemon';
 import open from 'open';
+import {stream as wiredep} from 'wiredep';
 
 const paths = {
     client: {
         indexView: 'client/index.html',
-        styles: 'client/{app,components}/**/*.scss',
+        views: 'client/{app|components}/**/*.html',
         mainStyle: 'client/app/app.scss',
+        styles: 'client/{app,components}/**/*.scss',
         scripts: 'client/**/!(*.spec|*.mock).js',
         test: 'client/{app,components}/**/*.{spec,mock}.js'
     },
     server: {
-        scripts: 'server/**/!(*.spec|*.intergration).js',
+        scripts: [
+          'server/**/!(*.spec|*.intergration).js',
+          '!server/config/local.env.sample.js'
+        ],
         json: 'server/**/*.json',
         test: {
-            intergration: 'server/**/*.intergration.js',
-            unit: 'server/**/*.spec.js'
+            intergration: ['server/**/*.intergration.js', 'mocha.global.js'],
+            unit: ['server/**/*.spec.js', 'mocha.global.js']
         }
-    },
-    dist: 'dist'
+    }
 };
 const $ = gulpLoadPlugins();
 
@@ -53,12 +57,12 @@ let transplieServer = lazypipe()
     .pipe($.sourcemaps.write, '.');
 
 let lintScriptClient = lazypipe()
-    .pipe($.eslint)
+    .pipe($.eslint({'useEslintrc': true}))
     .pipe($.eslint.format)
     .pipe($.eslint.failAfterError);
 
 let lintScriptServer = lazypipe()
-    .pipe($.eslint)
+    .pipe($.eslint({'useEslintrc': true}))
     .pipe($.eslint.format)
     .pipe($.eslint.failAfterError);
 
@@ -92,7 +96,7 @@ function checkAppReady(cb) {
 }
 
 // call pate until first success
-function whenServerReady(cb) => {
+function whenServerReady (cb) => {
     let serverReady = false;
     const appReadyInterval = setInterval(() => {
         checkAppReady((ready) => {
@@ -113,6 +117,10 @@ function onServerLog(log) {
         $.util.colors.white(']') +
         log.message);
 }
+
+/********************
+ * Tasks
+ ********************/
 
 gulp.task('inject', cb => $.runSequence(['inject:js', 'inject:scss'], cb));
 
@@ -217,8 +225,74 @@ gulp.task('start:server:prod', () => {
         .on('log', onserverLog);
 });
 
+gulp.task('wiredep:client', () => {
+  return gulp.src(paths.client.mainView)
+    .pipe(wiredep({
+      exclude: [],
+      ignorePath: 'client'
+    }))
+    .pipe(gulp.dest('client'));
+});
+
+gulp.task('wiredep:test', () => {
+  return gulp.src('karma.conf.js')
+    .pipe(wiredep({
+      exclude: [],
+      devDependencies: true
+    }))
+    .pipe(gulp.dest('./'));
+});
+
+gulp.task('client:dist', () => del(['dist/!(.git*|.openshift|Procfile)**'], {dot: true}));
+
+/********************
+ * Watch
+ ********************/
+
 gulp.task('watch', () => {
     $.liverload.listen();
 
-    $.watch
+    $.watch(paths.client.styles, () => {
+      gulp.src(paths.client.mainStyle)
+        .pipe($.plumber())
+        .pipe(styles())
+        .pipe(gulp.dest('.tmp/app'))
+        .pipe($.liverload());
+    });
+
+    $.watch(paths.client.views)
+      .pipe($.plumber())
+      .pipe($.liverload());
+
+    $.watch(paths.client.scripts)
+      .pipe($.plumber())
+      .pipe(transpileClient())
+      .pipe(gulp.dest('.tmp'))
+      .pipe($.liverload());
+
+    $.watch(_.union(paths.server.srcripts, paths.client.test, paths.server.test.unit, paths.server.test.intergration))
+      .pipe($.plumber())
+      .pipe(lintScriptServer())
+      .pipe($.liverload());
+
+    $.watch('bower.json', ['wiredep:client']);
 });
+
+/********************
+ * Server
+ ********************/
+
+/********************
+ * Build
+ ********************/
+
+ gulp.task('html', () => {
+  return gulp.src('client/{app,components}/**/*.html')
+    .pipe($.angularTemplatecache({
+      module: 'richardApp'
+    }))
+    .pipe(gulp.dest('.tmp'));
+ });
+
+ gulp.task('constent', () => {
+ });
