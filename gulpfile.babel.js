@@ -6,14 +6,14 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import lazypipe from 'lazypipe';
 import nodemon from 'nodemon';
 import open from 'open';
-import {stream as wiredep} from 'wiredep';
-import {Instrumenter} from 'isparta';
-import {protractor, webdriver_update} from 'gulp-protractor';
+import { stream as wiredep } from 'wiredep';
+import { Instrumenter } from 'isparta';
+import { protractor, webdriver_update } from 'gulp-protractor';
 
 const paths = {
   client: {
-    indexView: 'client/index.html',
-    views: 'client/{app|components}/**/*.html',
+    indexHtml: 'client/index.html',
+    html: 'client/{app|components}/**/*.html',
     mainStyle: 'client/app/app.scss',
     styles: 'client/{app,components}/**/*.scss',
     scripts: 'client/**/!(*.spec|*.mock).js',
@@ -26,11 +26,11 @@ const paths = {
       'server/**/!(*.spec|*.intergration).js',
       '!server/config/local.env.sample.js'
     ],
-    json: 'server/**/*.json',
     test: {
       intergration: ['server/**/*.intergration.js', 'mocha.global.js'],
       unit: ['server/**/*.spec.js', 'mocha.global.js']
-    }
+    },
+    json: 'server/**/*.json'
   }
 };
 const $ = gulpLoadPlugins();
@@ -52,47 +52,59 @@ let transpileClient = lazypipe()
 
 let transplieServer = lazypipe()
   .pipe($.sourcemaps.init)
-  .pipe($.bable, {
-    plugins: [
-      'transform-class-properties',
-      'transform-runtime'
-    ]
-  })
+  // .pipe($.bable, {
+  //   plugins: [
+  //     'transform-class-properties',
+  //     'transform-runtime'
+  //   ]
+  // })
   .pipe($.sourcemaps.write, '.');
 
 let lintScriptClient = lazypipe()
-  .pipe($.eslint({ 'useEslintrc': true }))
-  .pipe($.eslint.format)
-  .pipe($.eslint.failAfterError);
+  .pipe(() => {
+    return $.eslint({ 'useEslintrc': true });
+  })
+  .pipe(() => {
+    return $.eslint.format();
+  })
+  .pipe(() => {
+    $.eslint.failAfterError();
+  });
 
 let lintScriptServer = lazypipe()
-  .pipe($.eslint({ 'useEslintrc': true }))
-  .pipe($.eslint.format)
-  .pipe($.eslint.failAfterError);
+  .pipe(() => {
+    return $.eslint({ 'useEslintrc': true });
+  })
+  .pipe(() => {
+    return $.eslint.format();
+  })
+  .pipe(() => {
+    $.eslint.failAfterError();
+  });
 
 let mocha = lazypipe()
-  .pipe(plugins.mocha, {
-    reporter: 'spec',
-    timeout: 5000,
-    require: [
-      './mocha.conf'
-    ]
-  });
+  // .pipe($.mocha, {
+  //   reporter: 'spec',
+  //   timeout: 5000,
+  //   require: [
+  //     './mocha.conf'
+  //   ]
+  // });
 
 let istanbul = lazypipe()
-  .pipe(plugins.istanbul.writeReports)
-  .pipe(plugins.istanbulEnforcer, {
-    thresholds: {
-      global: {
-        lines: 80,
-        statements: 80,
-        branches: 80,
-        functions: 80
-      }
-    },
-    coverageDirectory: './coverage',
-    rootDirectory : ''
-  });
+  .pipe($.istanbul.writeReports)
+  // .pipe($.istanbulEnforcer, {
+  //   thresholds: {
+  //     global: {
+  //       lines: 80,
+  //       statements: 80,
+  //       branches: 80,
+  //       functions: 80
+  //     }
+  //   },
+  //   coverageDirectory: './coverage',
+  //   rootDirectory: ''
+  // });
 
 // inject *.module.js sort
 function sortModulesTop(file1, file2) {
@@ -164,13 +176,13 @@ gulp.task('env:all', () => {
 
 gulp.task('env:test', () => {
   $.env({
-    vars: {NODE_ENV: 'test'}
+    vars: { NODE_ENV: 'test' }
   });
 });
 
 gulp.task('env:prod', () => {
   $.env({
-    vars: {NODE_ENV: 'production'}
+    vars: { NODE_ENV: 'production' }
   });
 });
 
@@ -181,7 +193,7 @@ gulp.task('env:prod', () => {
 gulp.task('inject', cb => $.runSequence(['inject:js', 'inject:scss'], cb));
 
 gulp.task('inject:js', () => {
-  return gulp.src(paths.client.indexView)
+  return gulp.src(paths.client.indexHtml)
     .pipe($.inject(
       gulp.src(_.union([paths.client.scripts], ['!client/app/app.js']), { read: false })
       .pipe($.sort(sortModulesTop))
@@ -190,7 +202,7 @@ gulp.task('inject:js', () => {
 });
 
 // gulp.task('inject:css', () => {
-//   return gulp.src(paths.client.indexView)
+//   return gulp.src(paths.client.indexHtml)
 //     .pipe($.inject(
 //       gulp.src('client/{app,components}/**/*.css', {read: false})
 //         .pipe($.sort()),
@@ -261,7 +273,7 @@ gulp.task('lint:script:serverTest', () => {
 gulp.task('clean', () => del(['.tmp/**/*'], { dot: true }));
 
 gulp.task('wiredep:client', () => {
-  return gulp.src(paths.client.mainView)
+  return gulp.src(paths.client.mainHtml)
     .pipe(wiredep({
       exclude: [],
       ignorePath: 'client'
@@ -278,7 +290,7 @@ gulp.task('wiredep:test', () => {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('clean:tmp', () => del(['.tmp/**/*'], {dot: true}));
+gulp.task('clean:tmp', () => del(['.tmp/**/*'], { dot: true }));
 
 gulp.task('clean:dist', () => del(['dist/!(.git*|.openshift|Procfile)**'], { dot: true }));
 
@@ -310,9 +322,7 @@ gulp.task('start:server:prod', () => {
 gulp.task('serve', cb => {
   runSequence(
     ['clean:tmp', 'constant'],
-    'wiredep:client',
-    ['transpile:client', 'styles'],
-    ['start:server', 'start:client'],
+    'wiredep:client', ['transpile:client', 'styles'], ['start:server', 'start:client'],
     'watch',
     cb
   );
@@ -322,8 +332,7 @@ gulp.task('serve:dist', () => {
   runSequence(
     'build',
     'env:all',
-    'env:prod',
-    ['start:server:prod', 'start:client'],
+    'env:prod', ['start:server:prod', 'start:client'],
     cb
   );
 });
@@ -361,7 +370,7 @@ gulp.task('watch', () => {
       .pipe($.liverload());
   });
 
-  $.watch(paths.client.views)
+  $.watch(paths.client.html)
     .pipe($.plumber())
     .pipe($.liverload());
 
@@ -390,8 +399,7 @@ gulp.task('build', cb => {
       'clean:tmp'
     ],
     'inject',
-    'wiredep:client',
-    [
+    'wiredep:client', [
       'build:images',
       'copy:extras',
       'copy:fonts',
@@ -422,10 +430,10 @@ gulp.task('constant', () => {
     stream: true,
     constants: { appConfig: sharedConfig }
   })
-  .pipe($.rename({
-    basename: 'app.constant'
-  }))
-  .pipe(gulp.dest('client/app/'));
+    .pipe($.rename({
+      basename: 'app.constant'
+    }))
+    .pipe(gulp.dest('client/app/'));
 });
 
 gulp.task('build:images', () => {
@@ -483,11 +491,11 @@ gulp.task('mocha:integration', () => {
 
 gulp.task('coverage:pre', () => {
   return gulp.src(paths.server.scripts)
-    .pipe(plugins.istanbul({
+    .pipe($.istanbul({
       instrumenter: Instrumenter,
       includeUntested: true
     }))
-    .pipe(plugins.istanbul.hookRequire());
+    .pipe($.istanbul.hookRequire());
 });
 
 gulp.task('coverage:unit', () => {
