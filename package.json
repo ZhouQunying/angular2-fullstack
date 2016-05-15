@@ -24,7 +24,6 @@
     "gulp-ng-constant": "^1.1.0",
     "gulp-protractor": "^2.3.0",
     "gulp-rename": "^1.2.2",
-    "gulp-run-sequence": "^0.3.2",
     "gulp-sass": "^2.3.0",
     "gulp-sort": "^2.0.0",
     "gulp-sourcemaps": "^2.0.0-alpha",
@@ -33,6 +32,7 @@
     "lazypipe": "^1.0.1",
     "nodemon": "^1.9.1",
     "open": "0.0.5",
+    "run-sequence": "^1.1.5",
     "wiredep": "^4.0.0"
   },
   "scripts": {
