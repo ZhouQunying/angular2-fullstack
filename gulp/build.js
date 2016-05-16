@@ -12,7 +12,8 @@ gulp.task('build', cb => {
       'clean:tmp'
     ],
     'inject',
-    'wiredep:client', [
+    'wiredep:client',
+    [
       'build:images',
       'copy:extras',
       'copy:fonts',
@@ -32,7 +33,7 @@ gulp.task('html', () => {
     .pipe(gulp.dest('.tmp'));
 });
 gulp.task('constant', () => {
-  let sharedConfig = require('./server/config/enviroment/shared');
+  let sharedConfig = require('../server/config/enviroment/shared');
 
   return $.ngConstant({
     name: 'richardApp.constants',

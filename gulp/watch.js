@@ -6,7 +6,7 @@ import paths from './paths';
 const $ = gulpLoadPlugins();
 
 gulp.task('watch', () => {
-  $.liverload.listen();
+  $.livereload.listen();
 
   $.watch(paths.client.styles, () => {
     gulp.src(paths.client.mainStyle)
@@ -14,14 +14,14 @@ gulp.task('watch', () => {
       .pipe($.sourcemaps.init)
       .pipe($.sass)
       .pipe($.autoprefixer, { browsers: ['last 1 version'] })
-      .pipe($.sourcemaps.write, '.');
+      .pipe($.sourcemaps.write, '.')
       .pipe(gulp.dest('.tmp/app'))
-      .pipe($.liverload());
+      .pipe($.livereload());
   });
 
   $.watch(paths.client.html)
     .pipe($.plumber())
-    .pipe($.liverload());
+    .pipe($.livereload());
 
   $.watch(paths.client.scripts)
     .pipe($.plumber())
@@ -31,16 +31,16 @@ gulp.task('watch', () => {
         'transform-class-properties'
       ]
     })
-    .pipe($.sourcemaps.write, '.');
+    .pipe($.sourcemaps.write, '.')
     .pipe(gulp.dest('.tmp'))
-    .pipe($.liverload());
+    .pipe($.livereload());
 
   $.watch(_.union(paths.server.srcripts, paths.client.test, paths.server.test.unit, paths.server.test.intergration))
     .pipe($.plumber())
     .pipe($.eslint({ 'useEslintrc': true }))
     .pipe($.eslint.format())
-    .pipe($.eslint.failAfterError());
-    .pipe($.liverload());
+    .pipe($.eslint.failAfterError())
+    .pipe($.livereload());
 
   $.watch('bower.json', ['wiredep:client']);
 });

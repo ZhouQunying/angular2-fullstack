@@ -3,7 +3,7 @@ import { stream as wiredep } from 'wiredep';
 import paths from './paths';
 
 gulp.task('wiredep:client', () => {
-  return gulp.src(paths.client.mainHtml)
+  return gulp.src(paths.client.indexHtml)
     .pipe(wiredep({
       exclude: [],
       ignorePath: 'client'

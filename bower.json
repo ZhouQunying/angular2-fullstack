@@ -1,6 +1,5 @@
 {
   "name": "fullstack",
-  "description": "This is a MEAN project. > Using MongoDB, Express, AngularJS, and Node, using ES6, gulp for automate workflow, and Sass grade CSS extension. And of course HTML5 CSS3.",
   "main": "server/app.js",
   "authors": [
     "Frank"
@@ -15,12 +14,11 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "e2e"
   ],
   "dependencies": {
     "angular-animate": "^1.5.5",
-    "angular-touch": "^1.5.5",
-    "bootstrap": "^3.3.6"
+    "bootstrap": "^3.3.6",
+    "angular": "^1.5.5"
   }
 }

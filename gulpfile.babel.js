@@ -1,16 +1,24 @@
 'use strict';
 
-import gulp from 'gulp';
-import _ from 'lodash';
-import gulpLoadPlugins from 'gulp-load-plugins';
-import lazypipe from 'lazypipe';
-import nodemon from 'nodemon';
-import open from 'open';
-import del from 'del';
-import runSequence from 'run-sequence';
-import { stream as wiredep } from 'wiredep';
-import { Instrumenter } from 'isparta';
-import { protractor, webdriver_update } from 'gulp-protractor';
+import wrench from 'wrench';
+
+wrench.readdirSyncRecursive('./gulp').filter(function(file) {
+  return (/\.(js|coffee)$/i).test(file);
+}).map(function(file) {
+  require('./gulp/' + file);
+});
+
+// import gulp from 'gulp';
+// import _ from 'lodash';
+// import gulpLoadPlugins from 'gulp-load-plugins';
+// import lazypipe from 'lazypipe';
+// import nodemon from 'nodemon';
+// import open from 'open';
+// import del from 'del';
+// import runSequence from 'run-sequence';
+// import { stream as wiredep } from 'wiredep';
+// import { Instrumenter } from 'isparta';
+// import { protractor, webdriver_update } from 'gulp-protractor';
 
 // const paths = {
 //   client: {
@@ -35,8 +43,8 @@ import { protractor, webdriver_update } from 'gulp-protractor';
 //     json: 'server/**/*.json'
 //   }
 // };
-const $ = gulpLoadPlugins();
-let config;
+// const $ = gulpLoadPlugins();
+// let config;
 
 // let styles = lazypipe()
 //   .pipe($.sourcemaps.init)

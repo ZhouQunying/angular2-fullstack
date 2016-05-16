@@ -1,7 +1,6 @@
 {
   "name": "fullstack",
   "version": "1.0.0",
-  "description": "This is a MEAN project. > Using MongoDB, Express, AngularJS, and Node, using ES6, gulp for automate workflow, and Sass grade CSS extension. And of course HTML5 CSS3.",
   "main": "server/app.js",
   "dependencies": {},
   "devDependencies": {
@@ -10,11 +9,12 @@
     "babelify": "^7.2.0",
     "eslint": "^2.8.0",
     "eslint-config-airbnb-es5": "^1.0.8",
-    "eslint-plugin-react": "^5.0.1",
     "gulp": "^3.9.1",
     "gulp-angular-templatecache": "^1.8.0",
     "gulp-autoprefixer": "^3.1.0",
+    "gulp-babel": "^6.1.2",
     "gulp-env": "^0.4.0",
+    "gulp-eslint": "^2.0.0",
     "gulp-inject": "^4.0.0",
     "gulp-istanbul": "^0.10.4",
     "gulp-istanbul-enforcer": "^1.0.3",
@@ -33,7 +33,8 @@
     "nodemon": "^1.9.1",
     "open": "0.0.5",
     "run-sequence": "^1.1.5",
-    "wiredep": "^4.0.0"
+    "wiredep": "^4.0.0",
+    "wrench": "^1.5.9"
   },
   "scripts": {
     "test": "gulp test"

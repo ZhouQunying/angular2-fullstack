@@ -7,24 +7,24 @@ const $ = gulpLoadPlugins();
 
 gulp.task('transpile:client', () => {
   return gulp.src(paths.client.scripts)
-    .pipe($.sourcemaps.init)
-    .pipe($.babel, {
+    .pipe($.sourcemaps.init())
+    .pipe($.babel({
       plugins: [
         'transform-class-properties'
       ]
-    })
-    .pipe($.sourcemaps.write, '.')
+    }))
+    .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest('.tmp'));
 });
 gulp.task('transpile:server', () => {
   return gulp.src(_.union([paths.server.scripts], [paths.server.json]))
-    .pipe($.sourcemaps.init)
-    .pipe($.bable, {
+    .pipe($.sourcemaps.init())
+    .pipe($.bable({
       plugins: [
         'transform-class-properties',
         'transform-runtime'
       ]
-    })
-    .pipe($.sourcemaps.write, '.');
-    .pipw(gulp.dest('dist/server'));
+    }))
+    .pipe($.sourcemaps.write('.'))
+    .pipe(gulp.dest('dist/server'));
 });
