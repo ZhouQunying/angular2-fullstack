@@ -6,6 +6,7 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import lazypipe from 'lazypipe';
 import nodemon from 'nodemon';
 import open from 'open';
+import runSequence from 'run-sequence';
 import { stream as wiredep } from 'wiredep';
 import { Instrumenter } from 'isparta';
 import { protractor, webdriver_update } from 'gulp-protractor';
