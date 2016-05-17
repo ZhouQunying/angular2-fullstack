@@ -19,7 +19,7 @@ gulp.task('transpile:client', () => {
 gulp.task('transpile:server', () => {
   return gulp.src(_.union([paths.server.scripts], [paths.server.json]))
     .pipe($.sourcemaps.init())
-    .pipe($.bable({
+    .pipe($.babel({
       plugins: [
         'transform-class-properties',
         'transform-runtime'

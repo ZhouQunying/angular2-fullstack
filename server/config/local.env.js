@@ -2,6 +2,6 @@
 
 module.exports = {
   DOMAIN: 'http://localhost:9000',
-  SESSION_SECRET: 'richardApp-secret',
+  SESSION_SECRET: 'fullstack-secret',
   DEBUG: ''
 };

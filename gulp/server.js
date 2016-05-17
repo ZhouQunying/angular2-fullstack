@@ -45,20 +45,22 @@ gulp.task('start:client', cb => {
 });
 gulp.task('start:server', () => {
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-  config = require('./server/config/environment');
+  config = require('../server/config/environment');
   nodemon('--watch server server')
     .on('log', onServerLog);
 });
 gulp.task('start:server:prod', () => {
   process.env.NODE_ENV = process.env.NODE_ENV || 'production';
-  config = require(`./dist/server/config/environment`);
+  config = require(`../dist/server/config/environment`);
   nodemon('--watch server server')
     .on('log', onserverLog);
 });
 gulp.task('serve', cb => {
   runSequence(
     ['clean:tmp', 'constant'],
-    'wiredep:client', ['transpile:client', 'styles'], ['start:server', 'start:client'],
+    'wiredep:client',
+    ['transpile:client', 'styles'],
+    ['start:server', 'start:client'],
     'watch',
     cb
   );
@@ -67,7 +69,8 @@ gulp.task('serve:dist', () => {
   runSequence(
     'build',
     'env:all',
-    'env:prod', ['start:server:prod', 'start:client'],
+    'env:prod',
+    ['start:server:prod', 'start:client'],
     cb
   );
 });
@@ -88,32 +91,6 @@ function checkAppReady(cb) {
 
   http.get(options, () => cb(true))
     .on('error', () => cb(false));
-}
-
-
-function checkAppReady(cb) {
-  const options = {
-    host: 'localhost',
-    port: config.port
-  };
-
-  http.get(options, () => cb(true))
-    .on('error', () => cb(false));
-}
-
-// call pate until first success
-function whenServerReady(cb) {
-  let serverReady = false;
-  const appReadyInterval = setInterval(() => {
-    checkAppReady((ready) => {
-      if (!ready || serverReady) {
-        return;
-      }
-      clearInterval(appReadyInterval);
-      serverReady = true;
-      cb();
-    })
-  });
 }
 
 // call pate until first success
