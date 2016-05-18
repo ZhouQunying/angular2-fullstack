@@ -2,9 +2,9 @@
 
 import wrench from 'wrench';
 
-wrench.readdirSyncRecursive('./gulp').filter(function(file) {
+wrench.readdirSyncRecursive('./gulp').filter(file => {
   return (/\.(js|coffee)$/i).test(file);
-}).map(function(file) {
+}).map(file => {
   require('./gulp/' + file);
 });
 

@@ -7,6 +7,39 @@ import paths from './paths';
 const $ = gulpLoadPlugins();
 let config;
 
+// server log
+function onServerLog(log) {
+  console.log($.util.colors.white('[') +
+    $.util.colors.yellow('nodemon') +
+    $.util.colors.white(']') +
+    log.message);
+}
+
+function checkAppReady(cb) {
+  const options = {
+    host: 'localhost',
+    port: config.port
+  };
+
+  http.get(options, () => cb(true))
+    .on('error', () => cb(false));
+}
+
+// call pate until first success
+function whenServerReady(cb) {
+  let serverReady = false;
+  const appReadyInterval = setInterval(() => {
+    checkAppReady((ready) => {
+      if (!ready || serverReady) {
+        return;
+      }
+      clearInterval(appReadyInterval);
+      serverReady = true;
+      cb();
+    })
+  });
+}
+
 /********************
  * Env
  ********************/
@@ -74,36 +107,3 @@ gulp.task('serve:dist', () => {
     cb
   );
 });
-
-// server log
-function onServerLog(log) {
-  console.log($.util.colors.white('[') +
-    $.util.colors.yellow('nodemon') +
-    $.util.colors.white(']') +
-    log.message);
-}
-
-function checkAppReady(cb) {
-  const options = {
-    host: 'localhost',
-    port: config.port
-  };
-
-  http.get(options, () => cb(true))
-    .on('error', () => cb(false));
-}
-
-// call pate until first success
-function whenServerReady(cb) {
-  let serverReady = false;
-  const appReadyInterval = setInterval(() => {
-    checkAppReady((ready) => {
-      if (!ready || serverReady) {
-        return;
-      }
-      clearInterval(appReadyInterval);
-      serverReady = true;
-      cb();
-    })
-  });
-}
