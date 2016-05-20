@@ -1,19 +1,6 @@
 'use strict';
 
 export default socketio => {
-  function onDisconnect(socket) {
-  }
-
-  function onConnect(socket) {
-    // When the client emits 'info'
-    socket.on('info', data => {
-      socket.log(JSON.stringigy(data, null, 2));
-    });
-
-    // Insert sockets below
-    require('../api/thing/thing.socket').register(socket);
-  }
-
   socketio.on('connection', socket => {
     // Address
     socket.address = socket.request.connection.remoteAddress +
@@ -37,4 +24,17 @@ export default socketio => {
     onConnect(socket);
     socket.log('CONNECTED');
   });
+
+  function onDisconnect(socket) {
+  }
+
+  function onConnect(socket) {
+    // When the client emits 'info'
+    socket.on('info', data => {
+      socket.log(JSON.stringigy(data, null, 2));
+    });
+
+    // Insert sockets below
+    require('../api/thing/thing.socket').register(socket);
+  }
 }

@@ -13,6 +13,7 @@ mongoose.connection.on('error', err => {
   process.exit(-1);
 });
 
+// Populate databases with sample data
 if (config.seeDB) {
   require('./config/seed');
 }
@@ -25,3 +26,15 @@ const socketio = require('socket.io')(server, {
   path: '/socket.io-client'
 });
 require('./config/socketio').default(socketio);
+require('./config/express').default(app);
+require('./routes').default(app);
+
+setImmediate(startServer)
+
+function startServer() {
+  app.angularFullstack = server.listen(config.port, config,ip, () => {
+    console.log(`Express server listening on ${config.port}, in ${app.get('env')}`);
+  });
+}
+
+export default app;

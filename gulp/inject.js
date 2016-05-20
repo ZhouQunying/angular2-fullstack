@@ -6,25 +6,6 @@ import paths from './paths';
 
 const $ = gulpLoadPlugins();
 
-// inject *.module.js sort
-function sortModulesTop(file1, file2) {
-  const module = /\.module\.js$/;
-  const fileModule1 = module.test(file1.path);
-  const fileModule2 = module.test(file2.path);
-  if (fileModule1 === fileModule2) {
-    if (file1.path < file2.path) {
-      return -1;
-    }
-    if (file1.path > file2.path) {
-      return 1;
-    } else {
-      return 0;
-    }
-  } else {
-    return (fileModule1 ? -1 : 1);
-  }
-}
-
 gulp.task('inject', cb => runSequence(['inject:js', 'inject:scss'], cb));
 gulp.task('inject:js', () => {
   return gulp.src(paths.client.indexHtml)
@@ -61,3 +42,22 @@ gulp.task('inject:scss', () => {
       }))
     .pipe(gulp.dest('client/app'));
 });
+
+// inject *.module.js sort
+function sortModulesTop(file1, file2) {
+  const module = /\.module\.js$/;
+  const fileModule1 = module.test(file1.path);
+  const fileModule2 = module.test(file2.path);
+  if (fileModule1 === fileModule2) {
+    if (file1.path < file2.path) {
+      return -1;
+    }
+    if (file1.path > file2.path) {
+      return 1;
+    } else {
+      return 0;
+    }
+  } else {
+    return (fileModule1 ? -1 : 1);
+  }
+}

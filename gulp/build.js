@@ -33,7 +33,7 @@ gulp.task('html', () => {
     .pipe(gulp.dest('.tmp'));
 });
 gulp.task('constant', () => {
-  let sharedConfig = require('../server/config/enviroment/shared');
+  let sharedConfig = require('../server/config/environment/shared');
 
   return $.ngConstant({
     name: 'richardApp.constants',
