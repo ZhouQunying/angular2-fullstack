@@ -51,7 +51,8 @@ export default function(app) {
       },
       xframe: 'SAMEORIGIN',
       hsts: {
-        maxAge: 31536000, //1 year, in seconds
+        // 1 year, in seconds
+        maxAge: 31536000,
         includeSubDomains: true,
         preload: true
       },

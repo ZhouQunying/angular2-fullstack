@@ -1,5 +1,5 @@
 (function(angular, undefined) {
-  angular.module("richardApp.constants", [])
+  angular.module("fullstackApp.constants", [])
 
 .constant("appConfig", {
 	"userRoles": [

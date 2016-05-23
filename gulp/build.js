@@ -19,7 +19,7 @@ gulp.task('build', cb => {
       'copy:fonts',
       'copy:assets',
       'copy:server',
-      'transpile:server',
+      'es6:server',
       'build:client'
     ],
     cb
@@ -28,7 +28,7 @@ gulp.task('build', cb => {
 gulp.task('html', () => {
   return gulp.src('client/{app,components}/**/*.html')
     .pipe($.angularTemplatecache({
-      module: 'richardApp'
+      module: 'fullstackApp'
     }))
     .pipe(gulp.dest('.tmp'));
 });
@@ -36,7 +36,7 @@ gulp.task('constant', () => {
   let sharedConfig = require('../server/config/environment/shared');
 
   return $.ngConstant({
-    name: 'richardApp.constants',
+    name: 'fullstackApp.constants',
     deps: [],
     wrap: true,
     stream: true,

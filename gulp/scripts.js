@@ -5,7 +5,7 @@ import paths from './paths';
 
 const $ = gulpLoadPlugins();
 
-gulp.task('transpile:client', () => {
+gulp.task('es6:client', () => {
   return gulp.src(paths.client.scripts)
     .pipe($.sourcemaps.init())
     .pipe($.babel({
@@ -16,7 +16,7 @@ gulp.task('transpile:client', () => {
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest('.tmp'));
 });
-gulp.task('transpile:server', () => {
+gulp.task('es6:server', () => {
   return gulp.src(_.union([paths.server.scripts], [paths.server.json]))
     .pipe($.sourcemaps.init())
     .pipe($.babel({

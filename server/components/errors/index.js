@@ -1,6 +1,6 @@
 'use strict';
 
-export default [404] = (req, res) {
+module.exports[404] = (req, res)  => {
   const result = {
     status: 404
   };

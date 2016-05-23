@@ -4,6 +4,7 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import runSequence from 'run-sequence';
 import nodemon from 'nodemon';
 import http from 'http';
+import open from 'open';
 import paths from './paths';
 
 const $ = gulpLoadPlugins();
@@ -60,8 +61,9 @@ gulp.task('start:server:prod', () => {
 gulp.task('serve', cb => {
   runSequence(
     ['clean:tmp', 'constant'],
+    ['lint:scripts', 'inject'],
     'wiredep:client',
-    ['transpile:client', 'styles'],
+    ['es6:client', 'styles'],
     ['start:server', 'start:client'],
     'watch',
     cb
@@ -90,15 +92,15 @@ function checkAppReady(cb) {
     host: 'localhost',
     port: config.port
   };
-
-  http.get(options, () => cb(true))
+  http
+    .get(options, () => cb(true))
     .on('error', () => cb(false));
 }
 
-// call pate until first success
+// call page until first success
 function whenServerReady(cb) {
   let serverReady = false;
-  const appReadyInterval = setInterval(() => {
+  const appReadyInterval = setInterval(() =>
     checkAppReady((ready) => {
       if (!ready || serverReady) {
         return;
@@ -106,6 +108,5 @@ function whenServerReady(cb) {
       clearInterval(appReadyInterval);
       serverReady = true;
       cb();
-    })
-  });
+    }), 100);
 }
