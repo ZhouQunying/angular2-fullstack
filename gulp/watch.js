@@ -11,10 +11,10 @@ gulp.task('watch', () => {
   $.watch(paths.client.styles, () => {
     gulp.src(paths.client.mainStyle)
       .pipe($.plumber())
-      .pipe($.sourcemaps.init)
-      .pipe($.sass)
-      .pipe($.autoprefixer, { browsers: ['last 1 version'] })
-      .pipe($.sourcemaps.write, '.')
+      .pipe($.sourcemaps.init())
+      .pipe($.sass())
+      .pipe($.autoprefixer({ browsers: ['last 1 version'] }))
+      .pipe($.sourcemaps.write('.'))
       .pipe(gulp.dest('.tmp/app'))
       .pipe($.livereload());
   });
@@ -25,22 +25,18 @@ gulp.task('watch', () => {
 
   $.watch(paths.client.scripts)
     .pipe($.plumber())
-    .pipe($.sourcemaps.init)
-    .pipe($.babel, {
-      plugins: [
-        'transform-class-properties'
-      ]
-    })
-    .pipe($.sourcemaps.write, '.')
+    .pipe($.sourcemaps.init())
+    .pipe($.babel({ plugins: ['transform-class-properties'] }))
+    .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest('.tmp'))
     .pipe($.livereload());
 
-  $.watch(_.union(paths.server.srcripts, paths.client.test, paths.server.test.unit, paths.server.test.intergration))
+  $.watch(_.union(paths.server.scripts, paths.client.test, paths.server.test.unit, paths.server.test.intergration))
     .pipe($.plumber())
     .pipe($.eslint({ 'useEslintrc': true }))
     .pipe($.eslint.format())
     .pipe($.eslint.failAfterError())
     .pipe($.livereload());
 
-  $.watch('bower.json', ['wiredep:client']);
+  gulp.watch('bower.json', ['wiredep:client']);
 });

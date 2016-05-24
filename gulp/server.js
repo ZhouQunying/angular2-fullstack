@@ -43,19 +43,19 @@ gulp.task('env:prod', () => {
 gulp.task('start:client', cb => {
   whenServerReady(() => {
     open('http://localhost:' + config.port);
-    cb();
   });
+  cb();
 });
 gulp.task('start:server', () => {
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
   config = require('../server/config/environment');
-  nodemon('--watch server server')
+  nodemon('-w server server')
     .on('log', onServerLog);
 });
 gulp.task('start:server:prod', () => {
   process.env.NODE_ENV = process.env.NODE_ENV || 'production';
   config = require(`../dist/server/config/environment`);
-  nodemon('--watch server server')
+  nodemon('-w server server')
     .on('log', onserverLog);
 });
 gulp.task('serve', cb => {
