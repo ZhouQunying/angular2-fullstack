@@ -55,8 +55,8 @@ gulp.task('start:server', () => {
 gulp.task('start:server:prod', () => {
   process.env.NODE_ENV = process.env.NODE_ENV || 'production';
   config = require(`../dist/server/config/environment`);
-  nodemon('-w server server')
-    .on('log', onserverLog);
+  nodemon('-w dist/server dist/server')
+    .on('log', onServerLog);
 });
 gulp.task('serve', cb => {
   runSequence(
@@ -83,7 +83,7 @@ gulp.task('serve:dist', () => {
 function onServerLog(log) {
   console.log($.util.colors.white('[') +
     $.util.colors.yellow('nodemon') +
-    $.util.colors.white(']') +
+    $.util.colors.white('] ') +
     log.message);
 }
 

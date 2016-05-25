@@ -101,7 +101,7 @@ gulp.task('build:client', ['es6:client', 'styles', 'html', 'constant'], () => {
         .pipe($.rev())
       .pipe(htmlBlock.restore)
     .pipe($.revReplace({manifest}))
-    .pipe(gulp.dest(`${paths.dist}/${clientPath}`));
+    .pipe(gulp.dest('dist/client'));
 });
 gulp.task('copy:extras', () => {
   return gulp.src([
@@ -113,7 +113,7 @@ gulp.task('copy:extras', () => {
 });
 gulp.task('copy:assets', () => {
   return gulp.src([paths.client.assets, '!client/assets/images/**/*'])
-    .pipe(gulp.dest('dist/client/asstes'));
+    .pipe(gulp.dest('dist/client/assets'));
 });
 gulp.task('copy:server', () => {
   return gulp.src([

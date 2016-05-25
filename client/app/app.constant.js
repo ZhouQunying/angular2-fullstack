@@ -2,11 +2,13 @@
   angular.module("fullstackApp.constants", [])
 
 .constant("appConfig", {
-	"userRoles": [
-		"guest",
-		"user",
-		"admin"
-	]
+	"default": {
+		"userRoles": [
+			"guest",
+			"user",
+			"admin"
+		]
+	}
 })
 
 ;
