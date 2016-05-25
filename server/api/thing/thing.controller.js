@@ -15,15 +15,15 @@ export function index(req, res) {
 }
 
 function respondWithResult(res, statusCode) {
-  const statusCode = statusCode || 200;
+  const code = statusCode || 200;
   return function(entity) {
-    res.status(statusCode).json(entity);
+    res.status(code).json(entity);
   }
 }
 
 function handleError(res, statusCode) {
-  const statusCode = statusCode || 500;
+  const code = statusCode || 500;
   return function(entity) {
-    res.status(statusCode).send(err);
+    res.status(code).send(err);
   }
 }

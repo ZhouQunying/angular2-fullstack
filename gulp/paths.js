@@ -7,11 +7,11 @@ const paths = {
     scripts: 'client/**/!(*.spec|*.mock).js',
     test: 'client/{app,components}/**/*.{spec,mock}.js',
     images: 'client/assets/images/**/*',
-    asstes: 'client/asstes/**/*'
+    assets: 'client/assets/**/*'
   },
   server: {
     scripts: [
-      'server/**/!(*.spec|*.intergration).js',
+      'server/**/!(*.spec|*.integration).js',
       '!server/config/local.env.sample.js'
     ],
     test: {

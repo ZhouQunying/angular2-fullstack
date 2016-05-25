@@ -1,5 +1,5 @@
 'use strict';
 
-exports = module.exports = {
+export default {
   userRoles: ['guest', 'user', 'admin']
 }

@@ -2,9 +2,35 @@ import gulp from 'gulp';
 import _ from 'lodash';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import runSequence from 'run-sequence';
+import { stream as wiredep } from 'wiredep';
 import paths from './paths';
 
 const $ = gulpLoadPlugins();
+
+/********************
+ * Wiredep
+ ********************/
+
+gulp.task('wiredep:client', () => {
+  return gulp.src(paths.client.indexHtml)
+    .pipe(wiredep({
+      exclude: [],
+      ignorePath: 'client'
+    }))
+    .pipe(gulp.dest('client'));
+});
+gulp.task('wiredep:test', () => {
+  return gulp.src('karma.conf.js')
+    .pipe(wiredep({
+      exclude: [],
+      devDependencies: true
+    }))
+    .pipe(gulp.dest('./'));
+});
+
+/********************
+ * Inject
+ ********************/
 
 gulp.task('inject', cb => runSequence(['inject:js', 'inject:scss'], cb));
 gulp.task('inject:js', () => {

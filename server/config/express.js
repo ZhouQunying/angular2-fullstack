@@ -18,7 +18,7 @@ import config from './environment';
 
 const MongoStore = connectMongo(session);
 
-export default function(app) {
+export default app => {
   const env = app.get('env');
 
   app.set('view', path.join(config.root, 'server/view'));
