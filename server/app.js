@@ -7,7 +7,7 @@ import config from './config/environment';
 mongoose.Promise = require('bluebird');
 
 // Connect to MongoDB
-mongoose.connection(config.mongo.uri, config.mongo.options);
+mongoose.connect(config.mongo.uri, config.mongo.options);
 mongoose.connection.on('error', err => {
   console.error('MongoDB connection error: ' + err);
   process.exit(-1);
@@ -29,7 +29,7 @@ require('./config/socketio').default(socketio);
 require('./config/express').default(app);
 require('./routes').default(app);
 
-setImmediate(startServer)
+setImmediate(startServer);
 
 function startServer() {
   app.angularFullstack = server.listen(config.port, config,ip, () => {

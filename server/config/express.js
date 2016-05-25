@@ -33,7 +33,7 @@ export default app => {
 
   app.use(session({
     secret: config.secrets.session,
-    saveUnitialized: true,
+    saveUninitialized: true,
     resave: false,
     store: new MongoStore({
       mongooseConnection: mongoose.connection,

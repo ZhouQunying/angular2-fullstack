@@ -8,4 +8,4 @@ export default {
 
   // Seed database on startup
   seedDB: true
-}
+};

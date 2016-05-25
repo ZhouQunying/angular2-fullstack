@@ -17,8 +17,7 @@ const paths = {
     test: {
       intergration: ['server/**/*.intergration.js', 'mocha.global.js'],
       unit: ['server/**/*.spec.js', 'mocha.global.js']
-    },
-    json: 'server/**/*.json'
+    }
   }
 };
 

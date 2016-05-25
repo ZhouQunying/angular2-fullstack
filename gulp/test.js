@@ -2,9 +2,10 @@ import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import lazypipe from 'lazypipe';
 import runSequence from 'run-sequence';
-import paths from './paths';
+import { Server as KarmaServer } from 'karma';
 import { Instrumenter } from 'isparta';
 import { protractor, webdriver_update } from 'gulp-protractor';
+import paths from './paths';
 
 const $ = gulpLoadPlugins();
 
@@ -13,7 +14,7 @@ let mocha = lazypipe()
     reporter: 'spec',
     timeout: 5000,
     require: [
-      './mocha.conf'
+      '../mocha.conf'
     ]
   });
 
@@ -34,7 +35,7 @@ let istanbul = lazypipe()
 
 gulp.task('test:client', ['wiredep:test', 'constant'], cb => {
   new KarmaServer({
-    configFile: `${__dirname}/${paths.karma}`,
+    configFile: '../karma.conf.js',
     singleRun: true
   }, cb).start();
 });
@@ -89,7 +90,7 @@ gulp.task('webdriver_update', webdriver_update);
 gulp.task('test:e2e', ['env:all', 'env:test', 'start:server', 'webdriver_update'], cb => {
   gulp.src('e2e/**/*.spec.js')
     .pipe(protractor({
-      configFile: 'protractor.conf.js'
+      configFile: '../protractor.conf.js'
     })).on('error', err => {
       console.log(err)
     }).on('end', () => {

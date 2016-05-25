@@ -3,7 +3,7 @@
 import path from 'path';
 import errors from './components/errors';
 
-export default function(app) {
+export default app => {
   // Insert routes below
   app.use('/app/things', require('./api/thing'));
 
@@ -14,6 +14,6 @@ export default function(app) {
   // All other routes should redirect to the index.html
   app.route('/*')
     .get((req, res) => {
-      res.sendFile(path.resolve(path.join(app.get('appPath'), 'index.html')));
+      res.sendFile(path.resolve(path.join(app.get('appPath'), '/index.html')));
     });
 };

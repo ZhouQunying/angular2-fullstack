@@ -17,7 +17,7 @@ gulp.task('es6:client', () => {
     .pipe(gulp.dest('.tmp'));
 });
 gulp.task('es6:server', () => {
-  return gulp.src(_.union(paths.server.scripts, [paths.server.json]))
+  return gulp.src(_.union(paths.server.scripts, ['server/**/*.json']))
     .pipe($.sourcemaps.init())
     .pipe($.babel({
       plugins: [

@@ -8,7 +8,7 @@ import _ from 'lodash';
 import Thing from './thing.model';
 
 // Get list of Things
-export function index(req, res) {
+export const index = (req, res) => {
   return Thing.find().exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
