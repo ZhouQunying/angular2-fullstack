@@ -2,7 +2,7 @@
 
 import express from 'express';
 import path from 'path';
-import compassion from 'compassion';
+import compression from 'compression';
 import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
@@ -23,8 +23,8 @@ export default app => {
 
   app.set('view', path.join(config.root, 'server/view'));
   app.engine('html', require('ejs').renderFile);
-  app.get('view engine', 'html');
-  app.use(compassion());
+  app.set('view engine', 'html');
+  app.use(compression());
   app.use(bodyParser.urlencoded({extended: false}));
   app.use(bodyParser.json());
   app.use(methodOverride());
@@ -72,7 +72,7 @@ export default app => {
 
   if ('development' === env || 'test' === env) {
     app.use(express.static(path.join(config.root, 'tmp')));
-    app.use(espress.static(app.get('appPath')));
+    app.use(express.static(app.get('appPath')));
     app.use(morgan('dev'));
 
     // Has to be last
