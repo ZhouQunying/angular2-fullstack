@@ -40,16 +40,9 @@ gulp.task('env:prod', () => {
  * Server
  ********************/
 
-// gulp.task('start:client', cb => {
-//   whenServerReady(() => {
-//     open("http://www.google.com");
-//     open(`http://localhost:${config.port}`);
-//     cb();
-//   });
-// });
 gulp.task('start:client', cb => {
   whenServerReady(() => {
-    open('http://localhost:' + config.port);
+    open(`http://localhost:${config.port}`);
     cb();
   });
 });
