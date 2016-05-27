@@ -1,6 +1,7 @@
 'use strict';
 
 export default socketio => {
+  // In order to see all the debug output, set DEBUG (in server/config/local.env.js) to including the desired scope.
   socketio.on('connection', socket => {
     // Address
     socket.address = socket.request.connection.remoteAddress +

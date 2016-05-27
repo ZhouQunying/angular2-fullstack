@@ -6,3 +6,5 @@ import * as controller from './thing.controller';
 const router = express.Router();
 
 router.get('/', controller.index);
+
+export default router;

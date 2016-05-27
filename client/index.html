@@ -2,9 +2,30 @@
 <html>
 <head>
   <title>Home</title>
+
+  <!-- build:css(client) app/vendor.css -->
+  <!-- bower:css -->
+  <!-- endbower -->
+  <!-- endbuild -->
+
+  <!-- build:css({.tmp,client}) app/app.css -->
+  <link rel="stylesheet" href="app/app.css">
+  <!-- endbuild -->
 </head>
 <body>
   <h1>Home</h1>
+
+  <!-- build:js({client,node_modules}) app/vendor.js -->
+  <!-- bower:js -->
+  <script src="../bower_components/angular/angular.js"></script>
+  <script src="../bower_components/angular-animate/angular-animate.js"></script>
+  <script src="../bower_components/jquery/dist/jquery.js"></script>
+  <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
+
+  <!-- build:js(.tmp) app/app.js -->
+  <script src="app/app.js"></script>
   <!-- inject:js -->
   <script src="/client/app/account/login/login.controller.js"></script>
   <script src="/client/app/app.constant.js"></script>
@@ -12,5 +33,6 @@
   <script src="/client/app/main/main.js"></script>
   <script src="/client/components/footer.directive.js"></script>
   <!-- endinject -->
+  <!-- endbuild -->
 </body>
 </html>

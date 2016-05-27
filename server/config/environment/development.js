@@ -1,6 +1,6 @@
 'use strict';
 
-export default {
+module.exports = {
   // MongoDB connection options
   mongo: {
     uri: 'mongodb://localhost/fullstack-dev'
