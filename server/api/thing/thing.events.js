@@ -20,7 +20,7 @@ ThingEvents.setMaxListeners(0);
 
 function emitEvent(event) {
   return doc => {
-    ThingEvents.emit(event + ':' + doc._id, doc);
+    ThingEvents.emit(`${event}:${doc._id}`, doc);
     ThingEvents.emit(event, doc);
   }
 }
