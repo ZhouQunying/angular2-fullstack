@@ -32,7 +32,7 @@ require('./routes').default(app);
 setImmediate(startServer);
 
 function startServer() {
-  app.angularFullstack = server.listen(config.port, config,ip, () => {
+  app.angularFullstack = server.listen(config.port, config.ip, () => {
     console.log(`Express server listening on ${config.port}, in ${app.get('env')}`);
   });
 }

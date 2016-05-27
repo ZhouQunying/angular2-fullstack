@@ -1,7 +1,7 @@
 'use strict';
 
 // Test specific configuration
-export default {
+module.exports = {
   // MongoDB connection options
   mongo: {
     uri: 'mongodb://localhost/fullstack-test'
