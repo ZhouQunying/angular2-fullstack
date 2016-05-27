@@ -23,7 +23,7 @@ gulp.task('watch', () => {
     .pipe($.plumber())
     .pipe($.livereload());
 
-  $.watch(paths.client.scripts)
+  $.watch([paths.client.scripts, 'client/index.html'])
     .pipe($.plumber())
     .pipe($.sourcemaps.init())
     .pipe($.babel({ plugins: ['transform-class-properties'] }))

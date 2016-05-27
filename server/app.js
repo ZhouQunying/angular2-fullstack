@@ -9,7 +9,7 @@ mongoose.Promise = require('bluebird');
 // Connect to MongoDB
 mongoose.connect(config.mongo.uri, config.mongo.options);
 mongoose.connection.on('error', err => {
-  console.error('MongoDB connection error: ' + err);
+  console.error(`MongoDB connection error: ${err}`);
   process.exit(-1);
 });
 

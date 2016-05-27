@@ -42,9 +42,9 @@ gulp.task('env:prod', () => {
 
 gulp.task('start:client', cb => {
   whenServerReady(() => {
-    open('http://localhost:' + config.port);
+    open(`http://localhost:${config.port}`);
+    cb();
   });
-  cb();
 });
 gulp.task('start:server', () => {
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
@@ -79,7 +79,7 @@ gulp.task('serve:dist', () => {
   );
 });
 
-// server log
+// Server log
 function onServerLog(log) {
   console.log($.util.colors.white('[') +
     $.util.colors.yellow('nodemon') +
@@ -97,10 +97,10 @@ function checkAppReady(cb) {
     .on('error', () => cb(false));
 }
 
-// call page until first success
+// Call page until first success
 function whenServerReady(cb) {
   let serverReady = false;
-  const appReadyInterval = setInterval(() =>
+  let appReadyInterval = setInterval(() =>
     checkAppReady((ready) => {
       if (!ready || serverReady) {
         return;
@@ -108,5 +108,6 @@ function whenServerReady(cb) {
       clearInterval(appReadyInterval);
       serverReady = true;
       cb();
-    }), 100);
+    }),
+    100);
 }
