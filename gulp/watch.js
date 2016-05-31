@@ -19,11 +19,11 @@ gulp.task('watch', () => {
       .pipe($.livereload());
   });
 
-  $.watch(paths.client.html)
+  $.watch([paths.client.html, 'client/index.html'])
     .pipe($.plumber())
     .pipe($.livereload());
 
-  $.watch([paths.client.scripts, 'client/index.html'])
+  $.watch(paths.client.scripts)
     .pipe($.plumber())
     .pipe($.sourcemaps.init())
     .pipe($.babel({ plugins: ['transform-class-properties'] }))

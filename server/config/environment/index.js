@@ -33,7 +33,7 @@ const all = {
   }
 };
 
-export default _.merge(
+module.exports = _.merge(
   all,
   require('./shared'),
   require(`./${process.env.NODE_ENV}.js`) || {});
