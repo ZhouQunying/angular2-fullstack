@@ -37,8 +37,11 @@ gulp.task('inject:js', () => {
   return gulp.src(paths.client.indexHtml)
     .pipe($.inject(
       gulp.src(_.union([paths.client.scripts], ['!client/app/app.js']), { read: false })
-      .pipe($.sort(sortModulesTop))
-    ))
+        .pipe($.sort(sortModulesTop)), {
+          starttag: '<!-- inject:js -->',
+          endtag: '<!-- endinject -->',
+          transform: (filepath) => '<script src="' + filepath.replace('/client/', '') + '"></script>'
+        }))
     .pipe(gulp.dest('client'));
 });
 gulp.task('inject:css', () => {
@@ -46,8 +49,8 @@ gulp.task('inject:css', () => {
     .pipe($.inject(
       gulp.src('client/{app,components}/**/*.css', {read: false})
         .pipe($.sort()), {
-          starttag: '<!-- injector:css -->',
-          endtag: '<!-- endinjector:css -->',
+          starttag: '<!-- inject:css -->',
+          endtag: '<!-- endinject:css -->',
           transform: filepath => '<link rel="stylesheet" href="' + filepath.replace('/client/', '').replace('/.tmp/', '') + '">'
         }))
     .pipe(gulp.dest('client'));

@@ -5,9 +5,10 @@ import paths from './paths';
 const $ = gulpLoadPlugins();
 
 gulp.task('styles', () => {
-  return gulp.src(paths.client.mainStyle)
+  return gulp.src([paths.client.mainStyle, paths.client.styles])
     .pipe($.sourcemaps.init())
-    .pipe($.sass())
+    .pipe($.sass()
+      .on('error', $.sass.logError))
     .pipe($.autoprefixer({ browsers: ['last 1 version'] }))
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest('.tmp/app'));
