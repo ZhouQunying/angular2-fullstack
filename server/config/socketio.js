@@ -1,5 +1,18 @@
 'use strict';
 
+function onDisconnect(socket) {
+}
+
+function onConnect(socket) {
+  // When the client emits 'info'
+  socket.on('info', data => {
+    socket.log(JSON.stringigy(data, null, 2));
+  });
+
+  // Insert sockets below
+  require('../api/thing/thing.socket').register(socket);
+}
+
 export default socketio => {
   // In order to see all the debug output, set DEBUG (in server/config/local.env.js) to including the desired scope.
   socketio.on('connection', socket => {
@@ -25,17 +38,4 @@ export default socketio => {
     onConnect(socket);
     socket.log('CONNECTED');
   });
-}
-
-function onDisconnect(socket) {
-}
-
-function onConnect(socket) {
-  // When the client emits 'info'
-  socket.on('info', data => {
-    socket.log(JSON.stringigy(data, null, 2));
-  });
-
-  // Insert sockets below
-  require('../api/thing/thing.socket').register(socket);
 }

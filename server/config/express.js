@@ -21,7 +21,7 @@ const MongoStore = connectMongo(session);
 export default app => {
   const env = app.get('env');
 
-  app.set('view', path.join(config.root, 'server/view'));
+  app.set('views', path.join(config.root, 'server/views'));
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
   app.use(compression());
