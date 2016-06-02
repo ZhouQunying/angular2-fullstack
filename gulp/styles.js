@@ -5,7 +5,7 @@ import paths from './paths';
 const $ = gulpLoadPlugins();
 
 gulp.task('styles', () => {
-  return gulp.src([paths.client.mainStyle, paths.client.styles])
+  return gulp.src(paths.client.mainStyle)
     .pipe($.sourcemaps.init())
     .pipe($.sass()
       .on('error', $.sass.logError))

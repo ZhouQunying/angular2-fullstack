@@ -69,7 +69,7 @@ gulp.task('serve', cb => {
     cb
   );
 });
-gulp.task('serve:dist', () => {
+gulp.task('serve:dist', cb => {
   runSequence(
     'build',
     'env:all',
