@@ -71,7 +71,8 @@ export default app => {
   }
 
   if ('development' === env || 'test' === env) {
-    app.use(express.static(path.join(config.root, 'tmp')));
+    app.use(express.static(config.root));
+    app.use(express.static(path.join(config.root, '.tmp')));
     app.use(express.static(app.get('appPath')));
     app.use(morgan('dev'));
 
