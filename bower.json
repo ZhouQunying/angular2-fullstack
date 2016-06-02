@@ -1,23 +1,8 @@
 {
   "name": "fullstack",
-  "main": "server/app.js",
   "authors": [
-    "Frank"
+    "ZhouQunying"
   ],
-  "license": "ISC",
-  "moduleType": [
-    "es6",
-    "node"
-  ],
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "e2e"
-  ],
-  "dependencies": {
-    "angular-animate": "^1.5.5",
-    "bootstrap": "^3.3.6",
-    "angular": "^1.5.5"
-  }
+  "version": "0.0.1",
+  "dependencies": {}
 }

@@ -79,6 +79,12 @@ gulp.task('serve:dist', cb => {
   );
 });
 
+/********************
+ * Default
+ ********************/
+
+gulp.task('default', ['serve']);
+
 // Server log
 function onServerLog(log) {
   console.log($.util.colors.white('[') +

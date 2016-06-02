@@ -1,6 +1,9 @@
 {
   "name": "fullstack",
-  "version": "1.0.0",
+  "authors": [
+    "ZhouQunying"
+  ],
+  "version": "0.0.1",
   "main": "server/app.js",
   "dependencies": {
     "body-parser": "^1.15.1",
@@ -70,9 +73,8 @@
     "wiredep": "^4.0.0"
   },
   "scripts": {
-    "test": "gulp test"
+    "start": "gulp"
   },
-  "license": "ISC",
   "babel": {
     "presets": [
       "es2015"
