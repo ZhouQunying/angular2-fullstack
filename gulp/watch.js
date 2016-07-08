@@ -31,12 +31,12 @@ gulp.task('watch', () => {
     .pipe(gulp.dest('.tmp'))
     .pipe($.livereload());
 
-  $.watch(_.union(paths.server.scripts, paths.client.test, paths.server.test.unit, paths.server.test.intergration))
+  $.watch(paths.server.scripts)
     .pipe($.plumber())
     .pipe($.eslint({ 'useEslintrc': true }))
     .pipe($.eslint.format())
     .pipe($.eslint.failAfterError())
     .pipe($.livereload());
 
-  gulp.watch('bower.json', ['wiredep:client']);
+  gulp.watch('bower.json', ['wiredep']);
 });

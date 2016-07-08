@@ -60,9 +60,9 @@ gulp.task('start:server:prod', () => {
 });
 gulp.task('serve', cb => {
   runSequence(
-    ['clean:tmp', 'constant'],
+    'clean:tmp',
     ['lint:scripts', 'inject'],
-    'wiredep:client',
+    'wiredep',
     ['es6:client', 'styles'],
     ['start:server', 'start:client'],
     'watch',

@@ -11,7 +11,7 @@ const $ = gulpLoadPlugins();
  * Wiredep
  ********************/
 
-gulp.task('wiredep:client', () => {
+gulp.task('wiredep', () => {
   return gulp.src(paths.client.indexHtml)
     .pipe(wiredep({
       exclude: [
@@ -20,16 +20,6 @@ gulp.task('wiredep:client', () => {
       ignorePath: 'client'
     }))
     .pipe(gulp.dest('client'));
-});
-gulp.task('wiredep:test', () => {
-  return gulp.src('karma.conf.js')
-    .pipe(wiredep({
-      exclude: [
-        /bootstrap.css/
-      ],
-      devDependencies: true
-    }))
-    .pipe(gulp.dest('./'));
 });
 
 /********************

@@ -25,7 +25,7 @@ gulp.task('build', cb => {
       'clean:tmp'
     ],
     'inject',
-    'wiredep:client',
+    'wiredep',
     [
       'build:images',
       'copy:extras',
@@ -39,25 +39,7 @@ gulp.task('build', cb => {
 });
 gulp.task('html', () => {
   return gulp.src('client/{app,components}/**/*.html')
-    .pipe($.angularTemplatecache({
-      module: 'fullstackApp'
-    }))
     .pipe(gulp.dest('.tmp'));
-});
-gulp.task('constant', () => {
-  let sharedConfig = require('../server/config/environment/shared');
-
-  return $.ngConstant({
-    name: 'fullstackApp.constants',
-    deps: [],
-    wrap: true,
-    stream: true,
-    constants: { appConfig: sharedConfig }
-  })
-    .pipe($.rename({
-      basename: 'app.constant'
-    }))
-    .pipe(gulp.dest('client/app/'));
 });
 gulp.task('build:images', () => {
   return gulp.src(paths.client.images)
@@ -74,7 +56,7 @@ gulp.task('build:images', () => {
     }))
     .pipe(gulp.dest('dist/client/assets'));
 });
-gulp.task('build:client', ['es6:client', 'styles', 'html', 'constant'], () => {
+gulp.task('build:client', ['es6:client', 'styles', 'html'], () => {
   const manifest = gulp.src('dist/client/assets/rev-manifest.json');
   const appFilter = $.filter('**/app.js', {restore: true});
   const jsFilter = $.filter('**/*.js', {restore: true});
@@ -88,7 +70,6 @@ gulp.task('build:client', ['es6:client', 'styles', 'html', 'constant'], () => {
         .pipe($.concat('app/app.js'))
       .pipe(appFilter.restore)
       .pipe(jsFilter)
-        .pipe($.ngAnnotate())
         .pipe($.uglify())
       .pipe(jsFilter.restore)
       .pipe(cssFilter)

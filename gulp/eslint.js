@@ -19,25 +19,10 @@ let lintScriptServer = lazypipe()
 
 gulp.task('lint:scripts', cb => runSequence(['lint:scripts:client', 'lint:scripts:server'], cb));
 gulp.task('lint:scripts:client', () => {
-  return gulp.src(_.union(
-      [paths.client.scripts],
-      _.map([paths.client.test], blob => `!${blob}`),
-      ['!client/app/app.constant.js']
-    ))
+  return gulp.src(paths.client.scripts)
     .pipe(lintScriptClient());
 });
 gulp.task('lint:scripts:server', () => {
-  return gulp.src(_.union(
-      paths.server.scripts,
-      _.map(paths.server.test, blob => `!${blob}`)
-    ))
-    .pipe(lintScriptServer());
-});
-gulp.task('lint:script:clientTest', () => {
-  return gulp.src(paths.client.test)
-    .pipe(lintScriptClient());
-});
-gulp.task('lint:script:serverTest', () => {
-  return gulp.src(paths.server.test)
+  return gulp.src(paths.server.scripts)
     .pipe(lintScriptServer());
 });
