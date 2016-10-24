@@ -1,5 +1,4 @@
 import gulp from 'gulp';
-import _ from 'lodash';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import lazypipe from 'lazypipe';
 import runSequence from 'run-sequence';
