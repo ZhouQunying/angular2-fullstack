@@ -6,6 +6,10 @@ import paths from './paths';
 const $ = gulpLoadPlugins();
 
 gulp.task('watch', () => {
+  const tsResult = gulp.src(paths.client.scripts)
+    .pipe($.sourcemaps.init())
+    .pipe($.typescript());
+
   $.livereload.listen();
 
   $.watch(paths.client.styles, () => {
@@ -25,11 +29,11 @@ gulp.task('watch', () => {
 
   $.watch(paths.client.scripts)
     .pipe($.plumber())
-    .pipe($.sourcemaps.init())
-    .pipe($.babel({ plugins: ['transform-class-properties'] }))
-    .pipe($.sourcemaps.write('.'))
-    .pipe(gulp.dest('.tmp'))
-    .pipe($.livereload());
+    .pipe(tsResult.js
+      .pipe($.sourcemaps.write('.'))
+      .pipe(gulp.dest('.tmp'))
+      .pipe($.livereload())
+    );
 
   $.watch(paths.server.scripts)
     .pipe($.plumber())

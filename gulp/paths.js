@@ -4,7 +4,7 @@ const paths = {
     html: 'client/{app|components}/**/*.html',
     mainStyle: 'client/app/app.scss',
     styles: 'client/{app,components}/**/*.scss',
-    scripts: 'client/**/*.js',
+    scripts: 'client/**/*.ts',
     images: 'client/assets/images/**/*',
     assets: 'client/assets/**/*'
   },

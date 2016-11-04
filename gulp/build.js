@@ -31,7 +31,7 @@ gulp.task('build', cb => {
       'copy:extras',
       'copy:assets',
       'copy:server',
-      'es6:server',
+      'scripts:server',
       'build:client'
     ],
     cb
@@ -56,7 +56,7 @@ gulp.task('build:images', () => {
     }))
     .pipe(gulp.dest('dist/client/assets'));
 });
-gulp.task('build:client', ['es6:client', 'styles', 'html'], () => {
+gulp.task('build:client', ['scripts:client', 'styles', 'html'], () => {
   const manifest = gulp.src('dist/client/assets/rev-manifest.json');
   const appFilter = $.filter('**/app.js', {restore: true});
   const jsFilter = $.filter('**/*.js', {restore: true});

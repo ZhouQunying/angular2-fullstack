@@ -63,7 +63,7 @@ gulp.task('serve', cb => {
     'clean:tmp',
     ['lint:scripts', 'inject'],
     'wiredep',
-    ['es6:client', 'styles'],
+    ['scripts:client', 'styles'],
     ['start:server', 'start:client'],
     'watch',
     cb
