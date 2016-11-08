@@ -9,14 +9,14 @@ import Thing from './thing.model';
 
 function respondWithResult(res, statusCode) {
   const code = statusCode || 200;
-  return function(entity) {
+  return entity => {
     res.status(code).json(entity);
   }
 }
 
 function handleError(res, statusCode) {
   const code = statusCode || 500;
-  return function(entity) {
+  return entity => {
     res.status(code).send(err);
   }
 }

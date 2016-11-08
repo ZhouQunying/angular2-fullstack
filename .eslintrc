@@ -219,6 +219,11 @@
     "no-plusplus": 0,      // disallow use of unary operators, ++ and -- (off by default)
 
     ////////// By Richard //////////
-    "react/jsx-quotes": 0
+    "comma-dangle": [0, {
+      "arrays": "never",
+      "objects": "never",
+      "imports": "never",
+      "exports": "never"
+    }]
   }
 }

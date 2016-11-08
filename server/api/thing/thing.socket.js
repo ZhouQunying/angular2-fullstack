@@ -6,13 +6,13 @@ import ThingEvents from './thing.events';
 const events = ['save', 'remove'];
 
 function createListener(event, socket) {
-  return function(doc) {
+  return doc => {
     socket.emit(event, doc);
   }
 }
 
 function removeListener(event, listener) {
-  return function() {
+  return () => {
     ThingEvents.removeListener(event, listener);
   }
 }

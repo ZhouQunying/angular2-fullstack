@@ -11,22 +11,6 @@ const $ = gulpLoadPlugins();
 let config;
 
 /********************
- * Watch
- ********************/
-
-gulp.task('watch:server', () => {
-  $.livereload.listen();
-
-  $.watch(paths.server.scripts)
-    .pipe($.plumber())
-    .pipe($.eslint({ 'useEslintrc': true }))
-    .pipe($.eslint.format())
-    .pipe($.eslint.failAfterError())
-    .pipe($.livereload());
-});
-
-
-/********************
  * Env
  ********************/
 
@@ -78,8 +62,9 @@ gulp.task('serve', cb => {
   runSequence(
     'clean:tmp',
     ['lint:scripts'],
+    ['scripts:client', 'styles'],
     ['start:server', 'start:client'],
-    'watch:server',
+    'watch',
     cb
   );
 });
@@ -110,7 +95,7 @@ function onServerLog(log) {
 function checkAppReady(cb) {
   const options = {
     host: 'localhost',
-    port: config.port,
+    port: config.port
   };
   http
     .get(options, () => cb(true))
@@ -128,5 +113,6 @@ function whenServerReady(cb) {
       clearInterval(appReadyInterval);
       serverReady = true;
       cb();
-    }), 100);
+    }),
+    100);
 }

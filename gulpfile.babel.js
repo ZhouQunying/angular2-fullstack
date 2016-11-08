@@ -1,9 +1,9 @@
 'use strict';
 
-import wrench from 'wrench';
+import fs from 'fs';
 
-wrench.readdirSyncRecursive('./gulp').filter(file => {
-  return (/\.(js|coffee)$/i).test(file);
+fs.readdirSync('./gulp').filter(file => {
+  return (/\.(js|ts)$/i).test(file);
 }).map(file => {
   require('./gulp/' + file);
 });
