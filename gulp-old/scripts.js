@@ -5,18 +5,16 @@ import paths from './paths';
 
 const $ = gulpLoadPlugins();
 
-gulp.task('es6:client', () => {
-  return gulp.src(paths.client.scripts)
+gulp.task('scripts:client', () => {
+  const tsResult = gulp.src(paths.client.scripts)
     .pipe($.sourcemaps.init())
-    .pipe($.babel({
-      plugins: [
-        'transform-class-properties'
-      ]
-    }))
+    .pipe($.typescript());
+
+  return tsResult.js
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest('.tmp'));
 });
-gulp.task('es6:server', () => {
+gulp.task('scripts:server', () => {
   return gulp.src(_.union(paths.server.scripts, ['server/**/*.json']))
     .pipe($.sourcemaps.init())
     .pipe($.babel({
