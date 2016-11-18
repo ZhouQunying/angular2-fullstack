@@ -19,7 +19,7 @@ gulp.task('lint:scripts:client', () => {
     .pipe($.tslint.report());
 });
 gulp.task('lint:scripts:server', () => {
-  return gulp.src(paths.server.scripts)
+  return gulp.src([paths.server.scripts])
     .pipe(lintScriptServer());
 });
 gulp.task('lint:scripts', cb => runSequence(['lint:scripts:client', 'lint:scripts:server'], cb));

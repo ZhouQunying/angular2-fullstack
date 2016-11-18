@@ -4,10 +4,7 @@ const paths = {
     assets: 'client/assets/**/*',
   },
   server: {
-    scripts: [
-      'server/**/*.js',
-      '!server/config/local.env.sample.js',
-    ]
+    scripts: 'server/**/*.js',
   }
 };
 

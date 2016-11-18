@@ -10,14 +10,11 @@ import paths from './paths';
 const $ = gulpLoadPlugins();
 let config;
 
-/********************
- * Watch
- ********************/
-
+// Watch
 gulp.task('watch:server', () => {
   $.livereload.listen();
 
-  $.watch(paths.server.scripts)
+  $.watch([paths.server.scripts])
     .pipe($.plumber())
     .pipe($.eslint({ 'useEslintrc': true }))
     .pipe($.eslint.format())
@@ -26,10 +23,7 @@ gulp.task('watch:server', () => {
 });
 
 
-/********************
- * Env
- ********************/
-
+// Env
 gulp.task('env:all', () => {
   let localConfig;
   try {
@@ -52,10 +46,7 @@ gulp.task('env:prod', () => {
   });
 });
 
-/********************
- * Server
- ********************/
-
+// Server
 gulp.task('start:client', cb => {
   whenServerReady(() => {
     open(`http://localhost:${config.port}`);
@@ -93,10 +84,7 @@ gulp.task('serve:dist', cb => {
   );
 });
 
-/********************
- * Default
- ********************/
-
+// Default
 gulp.task('default', ['serve']);
 
 // Server log
