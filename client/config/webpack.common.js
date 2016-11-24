@@ -1,13 +1,13 @@
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import ExtractTextPlugin from 'extrct-text-webpack-plugin';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 import helpers from './helpers';
 
 module.exports = {
   entry: {
-    'vendor': '../app/vendor.ts',
-    'app': '../app/app.ts',
+    'vendor': './client/app/vendor.ts',
+    'app': './client/main.ts',
   },
 
   resolve: {
@@ -41,7 +41,7 @@ module.exports = {
     ],
 
     plugins: [
-      new webpack.optimize.CommonChunkPlugin({
+      new webpack.optimize.CommonsChunkPlugin({
         name: ['app', 'vendor'],
       }),
 
