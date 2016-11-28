@@ -4,12 +4,12 @@
  */
 'use strict';
 
-import Thing from '../api/thing/thing.model';
+import Home from '../api/home/home.model';
 
-Thing.find({})
+Home.find({})
   .remove()
   .then(() => {
-    Thing.create({
+    Home.create({
       name: 'CC',
       info: 'Pretty girl.',
     }, {

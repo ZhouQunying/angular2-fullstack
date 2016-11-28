@@ -2,7 +2,7 @@
 
 import express from 'express';
 
-import * as controller from './thing.controller';
+import * as controller from './home.controller';
 
 const router = express.Router();
 

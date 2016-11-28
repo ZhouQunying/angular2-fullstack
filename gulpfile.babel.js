@@ -2,8 +2,8 @@
 
 import fs from 'fs';
 
-fs.readdirSync('./gulp').filter(file => {
+fs.readdirSync('./server/config/gulp').filter(file => {
   return (/\.(js|ts)$/i).test(file);
 }).map(file => {
-  require('./gulp/' + file);
+  require('./server/config/gulp/' + file);
 });

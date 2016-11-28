@@ -1,9 +1,11 @@
 import path from 'path';
 
-const _root = path.resolve(__dirname, '../..');
+import config from '../config/environment';
 
-exports.root = (...paths) => {
+const _root = config.root;
+
+export const root = (...paths) => {
   const args = Array.prototype.slice.call(paths, 0);
 
   return path.join.apply(path, [_root].concat(args));
-}
+};

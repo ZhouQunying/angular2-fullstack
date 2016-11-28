@@ -1,6 +1,6 @@
 'use strict';
 
-import Thing from './thing.model';
+import Home from './home.model';
 
 function respondWithResult(res, statusCode) {
   const code = statusCode || 200;
@@ -19,7 +19,7 @@ function handleError(res, statusCode) {
 }
 
 export const index = (req, res) => {
-  return Thing.find()
+  return Home.find()
     .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));

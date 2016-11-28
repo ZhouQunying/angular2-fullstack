@@ -4,7 +4,7 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import commonConfig from './webpack.common';
 import helpers from './helpers';
 
-module.exports = webpackMerge(commonConfig, {
+export default webpackMerge(commonConfig, {
   devtool: 'cheap-module.eval-source-map',
 
   output: {

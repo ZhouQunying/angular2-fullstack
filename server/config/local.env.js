@@ -1,7 +1,7 @@
 'use strict';
 
 export default {
-  DOMAIN: 'http://localhost:9000',
+  DOMAIN: 'http://localhost:8080',
   SESSION_SECRET: 'lala-secret',
   DEBUG: '',
 };
