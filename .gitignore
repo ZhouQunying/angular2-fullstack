@@ -1,6 +1,5 @@
 .DS_Store
 .tmp
-.sass-cache
 npm-debug.log
 /node_modules
 /bower_components

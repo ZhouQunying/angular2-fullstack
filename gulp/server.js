@@ -27,7 +27,7 @@ gulp.task('watch:server', () => {
 gulp.task('env:all', () => {
   let localConfig;
   try {
-    localConfig = require('../server/config/local.env');
+    localConfig = require('../server/config/local.env').default;
   } catch (e) {
     localConfig = {};
   }

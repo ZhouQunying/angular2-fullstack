@@ -33,7 +33,7 @@ const all = {
   },
 };
 
-module.exports = _.merge(
+export default _.merge(
   all,
-  require('../shared'),
-  require(`./${process.env.NODE_ENV}`) || {});
+  require('../shared').default,
+  require(`./${process.env.NODE_ENV}`).default || {});
