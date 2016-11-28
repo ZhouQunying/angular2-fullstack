@@ -8,8 +8,8 @@ import {root} from './helpers';
 
 export default {
   entry: {
-    'vendor': path.resolve(config.root, './client/vendor.ts'),
-    'app': path.resolve(config.root, './client/main.ts'),
+    'vendor': path.join(config.root, 'client/vendor.ts'),
+    'app': path.join(config.root, 'client/main.ts'),
   },
 
   resolve: {

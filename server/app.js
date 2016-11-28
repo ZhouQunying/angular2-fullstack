@@ -17,13 +17,13 @@ mongoose.connection.on('error', err => {
 
 // Populate databases with sample data
 if (config.seedDB) {
-  require('./config/seed');
+  require('./shared/seed');
 }
 
 // Setup server
 const app = express();
 const server = http.createServer(app);
-require('./config/express').default(app);
+require('./express').default(app);
 require('./routes').default(app);
 
 setImmediate(startServer);

@@ -31,9 +31,11 @@ const all = {
       },
     },
   },
+
+  // Others
+  userRoles: ['guest', 'user', 'admin'],
 };
 
 export default _.merge(
   all,
-  require('../shared').default,
   require(`./${process.env.NODE_ENV}`).default || {});
