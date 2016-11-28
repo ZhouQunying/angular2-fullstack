@@ -20,20 +20,20 @@ const all = {
 
   // Secret for session, you will want to change this and make it an environment variable
   secrets: {
-    session: 'fullstack-secret'
+    session: 'lala-secret',
   },
 
   // MongoDB connection options
   mongo: {
     options: {
       db: {
-        saft: true
-      }
-    }
-  }
+        safe: true,
+      },
+    },
+  },
 };
 
 module.exports = _.merge(
   all,
-  require('./shared'),
-  require(`./${process.env.NODE_ENV}.js`) || {});
+  require('../shared'),
+  require(`./${process.env.NODE_ENV}`) || {});

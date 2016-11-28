@@ -6,7 +6,7 @@ function onDisconnect(socket) {
 function onConnect(socket) {
   // When the client emits 'info'
   socket.on('info', data => {
-    socket.log(JSON.stringigy(data, null, 2));
+    socket.log(JSON.stringify(data, null, 2));
   });
 
   // Insert sockets below
@@ -14,18 +14,19 @@ function onConnect(socket) {
 }
 
 export default socketio => {
-  // In order to see all the debug output, set DEBUG (in server/config/local.env.js) to including the desired scope.
+  // In order to see all the debug output,
+  // set DEBUG (in server/config/local.env.js) to including the desired scope.
   socketio.on('connection', socket => {
     // Address
-    socket.address = socket.request.connection.remoteAddress +
-      ':' + socket.request.connection.remotePort;
+    socket.address = `${socket.request.connection.remoteAddress}
+      :${socket.request.connection.remotePort}`;
 
     // Connect at
     socket.connectedAt = new Date();
 
     // Socket log func
     socket.log = (...data) => {
-      console.log(`SocketIO ${socket.nsp.name} [${socket.addree}]`, ...data);
+      console.log(`SocketIO ${socket.nsp.name} [${socket.address}]`, ...data);
     };
 
     // Disconnect call

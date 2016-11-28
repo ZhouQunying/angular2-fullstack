@@ -1,9 +1,11 @@
-'use strcit';
+'use strict';
 
 import express from 'express';
 import mongoose from 'mongoose';
-import http from 'http'
+import http from 'http';
+
 import config from './config/environment';
+
 mongoose.Promise = require('bluebird');
 
 // Connect to MongoDB
@@ -14,7 +16,7 @@ mongoose.connection.on('error', err => {
 });
 
 // Populate databases with sample data
-if (config.seeDB) {
+if (config.seedDB) {
   require('./config/seed');
 }
 
@@ -23,7 +25,7 @@ const app = express();
 const server = http.createServer(app);
 const socketio = require('socket.io')(server, {
   serverClient: config.env !== 'production',
-  path: '/socket.io-client'
+  path: '/socket.io-client',
 });
 require('./config/socketio').default(socketio);
 require('./config/express').default(app);
@@ -32,7 +34,7 @@ require('./routes').default(app);
 setImmediate(startServer);
 
 function startServer() {
-  app.angularFullstack = server.listen(config.port, config.ip, () => {
+  app.lala = server.listen(config.port, config.ip, () => {
     console.log(`Express server listening on ${config.port}, in ${app.get('env')}`);
   });
 }
