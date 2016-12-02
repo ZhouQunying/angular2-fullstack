@@ -8,7 +8,7 @@ import {root} from './helpers';
 
 export default {
   entry: {
-    'vendor': path.join(config.root, 'client/vendor.ts'),
+    'vendor': path.join(config.root, 'client/shared/vendor.ts'),
     'app': path.join(config.root, 'client/main.ts'),
   },
 
@@ -48,7 +48,7 @@ export default {
       }),
 
       new HtmlWebpackPlugin({
-        template: '../index.html',
+        template: path.join(config.root, 'client/index.html'),
       }),
     ],
   },

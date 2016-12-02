@@ -11,5 +11,6 @@ Home.find({})
     }, {
       name: 'Frank',
       info: 'Smart boy.',
+      active: true,
     });
   });

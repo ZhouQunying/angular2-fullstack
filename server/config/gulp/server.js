@@ -1,11 +1,9 @@
 import gulp from 'gulp';
-import _ from 'lodash';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import runSequence from 'run-sequence';
 import nodemon from 'nodemon';
 import http from 'http';
 import open from 'open';
-import paths from './paths';
 
 const $ = gulpLoadPlugins();
 let config;
@@ -14,7 +12,7 @@ let config;
 gulp.task('watch:server', () => {
   $.livereload.listen();
 
-  $.watch([paths.server.scripts])
+  $.watch('server/**/*.js')
     .pipe($.plumber())
     .pipe($.eslint({ 'useEslintrc': true }))
     .pipe($.eslint.format())
@@ -22,27 +20,27 @@ gulp.task('watch:server', () => {
     .pipe($.livereload());
 });
 
-
 // Env
 gulp.task('env:all', () => {
   let localConfig;
+
   try {
     localConfig = require('../server/config/local.env').default;
   } catch (e) {
     localConfig = {};
   }
   $.env({
-    vars: localConfig
+    vars: localConfig,
   });
 });
 gulp.task('env:test', () => {
   $.env({
-    vars: { NODE_ENV: 'test' }
+    vars: { NODE_ENV: 'test' },
   });
 });
 gulp.task('env:prod', () => {
   $.env({
-    vars: { NODE_ENV: 'production' }
+    vars: { NODE_ENV: 'production' },
   });
 });
 
