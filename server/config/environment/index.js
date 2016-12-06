@@ -1,5 +1,3 @@
-'use strict';
-
 import path from 'path';
 import _ from 'lodash';
 
@@ -35,7 +33,6 @@ const all = {
   // Others
   userRoles: ['guest', 'user', 'admin'],
 };
+const env = process.env.NODE_ENV ? require(`./${process.env.NODE_ENV}`).default : {};
 
-export default _.merge(
-  all,
-  require(`./${process.env.NODE_ENV}`).default || {});
+export default _.merge(all, env);

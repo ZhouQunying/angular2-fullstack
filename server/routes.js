@@ -1,10 +1,8 @@
-'use strict';
-
 import path from 'path';
 import errors from './shared/errors';
 import home from './api/home';
 
-export default app => {
+export default (app) => {
   // Insert routes below
   app.use('/app/home', home);
 

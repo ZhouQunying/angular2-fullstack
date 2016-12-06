@@ -25,7 +25,7 @@ gulp.task('env:all', () => {
   let localConfig;
 
   try {
-    localConfig = require('../server/config/local.env').default;
+    localConfig = require('../local.env').default;
   } catch (e) {
     localConfig = {};
   }
@@ -65,7 +65,6 @@ gulp.task('start:server:prod', () => {
 });
 gulp.task('serve', cb => {
   runSequence(
-    'clean:tmp',
     ['lint:scripts'],
     ['start:server', 'start:client'],
     'watch:server',

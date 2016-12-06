@@ -1,15 +1,11 @@
-import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-import config from '../config/environment';
-import {root} from './helpers';
-
 export default {
   entry: {
-    'vendor': path.join(config.root, 'client/shared/vendor.ts'),
-    'app': path.join(config.root, 'client/main.ts'),
+    vendor: 'client/vendor.ts',
+    app: 'client/main.ts',
   },
 
   resolve: {
@@ -32,12 +28,12 @@ export default {
       },
       {
         test: /\.css$/,
-        exclude: root('src', 'app'),
+        exclude: 'client',
         loader: ExtractTextPlugin.extract('style', 'css?sourceMap'),
       },
       {
         test: /\.css$/,
-        include: root('src', 'app'),
+        include: 'client',
         loader: 'raw',
       },
     ],
@@ -48,7 +44,7 @@ export default {
       }),
 
       new HtmlWebpackPlugin({
-        template: path.join(config.root, 'client/index.html'),
+        template: 'client/index.html',
       }),
     ],
   },

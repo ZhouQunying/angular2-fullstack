@@ -1,5 +1,3 @@
-'use strict';
-
 // Test specific configuration
 export default {
   // MongoDB connection options

@@ -1,5 +1,3 @@
-'use strict';
-
 export default {
   404: (req, res) => {
     const result = {
@@ -12,7 +10,7 @@ export default {
         return res.status(result.status).json(result);
       }
 
-      res.send(html);
+      return res.send(html);
     });
   },
 };

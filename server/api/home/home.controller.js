@@ -1,11 +1,9 @@
-'use strict';
-
 import Home from './home.model';
 
 function respondWithResult(res, statusCode) {
   const code = statusCode || 200;
 
-  return entity => {
+  return (entity) => {
     res.status(code).json(entity);
   };
 }
@@ -13,14 +11,13 @@ function respondWithResult(res, statusCode) {
 function handleError(res, statusCode) {
   const code = statusCode || 500;
 
-  return err => {
+  return (err) => {
     res.status(code).send(err);
   };
 }
 
-export const index = (req, res) => {
-  return Home.find()
+export const index = (req, res) =>
+  Home.find()
     .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
-};

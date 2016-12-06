@@ -1,5 +1,3 @@
-'use strict';
-
 // Development specific configuration
 export default {
   // MongoDB connection options

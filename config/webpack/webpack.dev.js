@@ -2,13 +2,12 @@ import webpackMerge from 'webpack-merge';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 import commonConfig from './webpack.common';
-import helpers from './helpers';
 
 export default webpackMerge(commonConfig, {
   devtool: 'cheap-module.eval-source-map',
 
   output: {
-    path: helpers.root('dist'),
+    path: 'dist/client',
     publicPath: 'http://localhost:8080/',
     filename: '[name].js',
     chunkFilename: '[id].chunk.js',

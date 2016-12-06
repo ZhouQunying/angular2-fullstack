@@ -1,5 +1,3 @@
-'use strict';
-
 import express from 'express';
 import path from 'path';
 import compression from 'compression';
@@ -14,18 +12,19 @@ import lusca from 'lusca';
 import favicon from 'serve-favicon';
 import morgan from 'morgan';
 import errorHandler from 'errorhandler';
+import connectLivereload from 'connect-livereload';
 
-import config from './environment';
+import config from './config/environment';
 
 const MongoStore = connectMongo(session);
 
-export default app => {
+export default (app) => {
   const env = app.get('env');
 
   app.set('views', path.join(config.root, 'server/views'));
   app.set('view engine', 'html');
   app.use(compression());
-  app.use(bodyParser.urlencoded({extended: false}));
+  app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(methodOverride());
   app.use(cookieParser());
@@ -64,7 +63,7 @@ export default app => {
   }
 
   if (env === 'development') {
-    app.use(require('connect-livereload')());
+    app.use(connectLivereload());
   }
 
   if (env === 'development' || env === 'test') {

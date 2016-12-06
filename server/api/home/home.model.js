@@ -1,5 +1,3 @@
-'use strict';
-
 import mongoose from 'mongoose';
 
 const HomeSchema = new mongoose.Schema({
