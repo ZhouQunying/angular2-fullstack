@@ -4,12 +4,12 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 export default {
   entry: {
-    vendor: 'client/vendor.ts',
-    app: 'client/main.ts',
+    vendor: './client/vendor.ts',
+    app: './client/main.ts',
   },
 
   resolve: {
-    extensions: ['', 'ts', 'js'],
+    extensions: ['', '.ts', '.js'],
   },
 
   module: {
@@ -44,7 +44,7 @@ export default {
       }),
 
       new HtmlWebpackPlugin({
-        template: 'client/index.html',
+        template: './client/index.html',
       }),
     ],
   },
