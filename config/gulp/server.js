@@ -61,11 +61,11 @@ gulp.task('env:all', () => {
     vars: localEnv,
   });
 });
-gulp.task('env:test', () => {
-  $.env({
-    vars: { NODE_ENV: 'test' },
-  });
-});
+// gulp.task('env:test', () => {
+//   $.env({
+//     vars: { NODE_ENV: 'test' },
+//   });
+// });
 gulp.task('env:prod', () => {
   $.env({
     vars: { NODE_ENV: 'production' },
@@ -94,7 +94,9 @@ gulp.task('start:server:prod', () => {
 gulp.task('serve', (cb) => {
   runSequence(
     // ['lint:scripts'],
-    ['start:server', 'start:client'],
+    'start:server',
+    'webpack',
+    'start:client',
     'watch:server',
     cb,
   );

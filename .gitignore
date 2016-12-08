@@ -1,6 +1,6 @@
 .DS_Store
-.tmp
 npm-debug.log
+/server/config/local.env.js
 /node_modules
 /bower_components
 /dist
