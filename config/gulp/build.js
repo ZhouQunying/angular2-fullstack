@@ -2,7 +2,7 @@ import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import runSequence from 'run-sequence';
 import del from 'del';
-import _ from 'lodash';
+import { union } from 'lodash';
 
 const $ = gulpLoadPlugins();
 
@@ -37,7 +37,7 @@ gulp.task('build', cb =>
   ));
 
 gulp.task('build:server', () =>
-  gulp.src(_.union(['server/**/*.js'], ['server/**/*.json']))
+  gulp.src(union(['server/**/*.js'], ['server/**/*.json']))
     .pipe($.sourcemaps.init())
     .pipe($.babel({
       plugins: [

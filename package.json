@@ -76,10 +76,5 @@
     "webpack-merge": "^0.18.0",
     "webpack-stream": "^3.2.0"
   },
-  "scripts": {},
-  "babel": {
-    "presets": [
-      "es2015"
-    ]
-  }
+  "scripts": {}
 }

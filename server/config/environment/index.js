@@ -1,5 +1,5 @@
 import path from 'path';
-import _ from 'lodash';
+import { merge } from 'lodash';
 
 const all = {
   env: process.env.NODE_ENV,
@@ -35,4 +35,4 @@ const all = {
 };
 const env = process.env.NODE_ENV ? require(`./${process.env.NODE_ENV}`).default : {};
 
-export default _.merge(all, env);
+export default merge(all, env);
