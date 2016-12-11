@@ -7,23 +7,15 @@ import { union } from 'lodash';
 const $ = gulpLoadPlugins();
 
 // Clean
-gulp.task('clean', ['clean:dist']);
-
-gulp.task('clean:dist', () => del(['dist/!(.git*)**'], { dot: true }));
+gulp.task('clean', () => del(['dist/!(.git*)**'], { dot: true }));
 
 // Copy
-gulp.task('copy', ['copy:extras', 'copy:assets']);
-
-gulp.task('copy:extras', () =>
+gulp.task('copy', () =>
   gulp.src([
     'client/favicon.ico',
     'client/robots.txt',
   ], { dot: true })
     .pipe(gulp.dest('dist/client')));
-
-gulp.task('copy:assets', () =>
-  gulp.src('client/assets/**/*')
-    .pipe(gulp.dest('dist/client/assets')));
 
 // Build
 gulp.task('build', cb =>

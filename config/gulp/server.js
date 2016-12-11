@@ -44,7 +44,7 @@ function whenServerReady(cb) {
 }
 
 // Watch
-gulp.task('watch:server', () => {
+gulp.task('watch', () => {
   $.livereload.listen();
 
   $.watch('server/**/*.js')
@@ -85,31 +85,33 @@ gulp.task('start:server', () => {
   nodemon('-w server server')
     .on('log', onServerLog);
 });
-gulp.task('start:server:prod', () => {
-  process.env.NODE_ENV = process.env.NODE_ENV || 'production';
-  config = require('../../dist/server/config/environment').default;
-  nodemon('-w dist/server dist/server')
-    .on('log', onServerLog);
-});
+// gulp.task('start:server:prod', () => {
+//   process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+//   config = require('../../dist/server/config/environment').default;
+//   nodemon('-w dist/server dist/server')
+//     .on('log', onServerLog);
+// });
 gulp.task('serve', (cb) => {
   runSequence(
     // ['lint:scripts'],
-    'start:server',
     'webpack',
-    'start:client',
-    'watch:server',
+    [
+      'start:server',
+      'start:client',
+    ],
+    'watch',
     cb,
   );
 });
-gulp.task('serve:dist', (cb) => {
-  runSequence(
-    'build',
-    'env:all',
-    'env:prod',
-    ['start:server:prod', 'start:client'],
-    cb,
-  );
-});
+// gulp.task('serve:dist', (cb) => {
+//   runSequence(
+//     'build',
+//     'env:all',
+//     'env:prod',
+//     ['start:server:prod', 'start:client'],
+//     cb,
+//   );
+// });
 
 // Default
 gulp.task('default', ['serve']);
