@@ -5,18 +5,12 @@ import nodemon from 'nodemon';
 import http from 'http';
 import open from 'open';
 import del from 'del';
-import lazypipe from 'lazypipe';
 import { union } from 'lodash';
 
 import localEnv from './server/config/local.env';
 
 const $ = gulpLoadPlugins();
 let config;
-
-const eslintServer = lazypipe()
-  .pipe($.eslint, { useEslintrc: true })
-  .pipe($.eslint.format)
-  .pipe($.eslint.failAfterError);
 
 function onServerLog(log) {
   console.log($.util.colors.white('[') +
@@ -66,22 +60,20 @@ gulp.task('env:prod', () => {
   });
 });
 
-// Eslint
-gulp.task('eslint', () =>
-  gulp.src('server/**/*.js')
-    .pipe(eslintServer()));
-
 // Watch
 gulp.task('watch', () => {
   $.livereload.listen();
 
-  $.watch('server/**/*.js')
-    .pipe($.plumber())
-    .pipe($.eslint({ useEslintrc: true }))
-    .pipe($.eslint.format())
-    .pipe($.eslint.failAfterError())
-    .pipe($.livereload());
+  gulp.watch('server/**/*.js', (event) => {
+    gulp.src(event.path)
+      .pipe($.plumber())
+      .pipe($.eslint({ useEslintrc: true }))
+      .pipe($.eslint.format())
+      .pipe($.eslint.failAfterError())
+      .pipe($.livereload());
+  });
 });
+
 
 // Server
 gulp.task('start:client', (cb) => {
@@ -104,7 +96,6 @@ gulp.task('start:server:prod', () => {
 });
 gulp.task('serve', (cb) => {
   runSequence(
-    'lint',
     ['start:server', 'start:client'],
     'watch',
     cb,
@@ -130,7 +121,6 @@ gulp.task('build', cb =>
     'build:server',
     cb,
   ));
-
 gulp.task('build:server', () =>
   gulp.src(union(['server/**/*.js'], ['server/**/*.json']))
     .pipe($.sourcemaps.init())
