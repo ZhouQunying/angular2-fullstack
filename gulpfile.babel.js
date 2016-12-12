@@ -60,6 +60,14 @@ gulp.task('env:prod', () => {
   });
 });
 
+gulp.task('eslint', () => {
+  gulp.src('server/**/*.js')
+    .pipe($.plumber())
+    .pipe($.eslint({ useEslintrc: true }))
+    .pipe($.eslint.format())
+    .pipe($.eslint.failAfterError())
+});
+
 // Watch
 gulp.task('watch', () => {
   $.livereload.listen();
@@ -73,7 +81,6 @@ gulp.task('watch', () => {
       .pipe($.livereload());
   });
 });
-
 
 // Server
 gulp.task('start:client', (cb) => {
@@ -96,6 +103,7 @@ gulp.task('start:server:prod', () => {
 });
 gulp.task('serve', (cb) => {
   runSequence(
+    'eslint',
     ['start:server', 'start:client'],
     'watch',
     cb,
