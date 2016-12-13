@@ -65,7 +65,7 @@ gulp.task('eslint', () => {
     .pipe($.plumber())
     .pipe($.eslint({ useEslintrc: true }))
     .pipe($.eslint.format())
-    .pipe($.eslint.failAfterError())
+    .pipe($.eslint.failAfterError());
 });
 
 // Watch
