@@ -35,7 +35,7 @@ export default (app) => {
     resave: false,
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
-      db: 'lala',
+      db: 'sparkme',
     }),
   }));
   app.set('clientPath', path.join(config.root, 'client'));

@@ -18,7 +18,7 @@ const all = {
 
   // Secret for session, you will want to change this and make it an environment variable
   secrets: {
-    session: 'lala-secret',
+    session: 'sparkme-secret',
   },
 
   // MongoDB connection options

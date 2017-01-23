@@ -2,6 +2,6 @@
 export default {
   // MongoDB connection options
   mongo: {
-    uri: 'mongodb://localhost/lala-test',
+    uri: 'mongodb://localhost/sparkme-test',
   },
 };

@@ -23,7 +23,7 @@ if (config.seedDB) {
 const app = express();
 const server = http.createServer(app);
 const startServer = () => {
-  app.lala = server.listen(config.port, config.ip, () => {
+  app.sparkme = server.listen(config.port, config.ip, () => {
     console.log(`Express server listening on ${config.port}, in ${app.get('env')}`);
   });
 };

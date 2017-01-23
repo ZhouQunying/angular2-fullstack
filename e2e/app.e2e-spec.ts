@@ -1,10 +1,10 @@
-import { Angular2FullstackPage } from './app.po';
+import { SparkMePage } from './app.po';
 
-describe('angular2-fullstack App', function() {
-  let page: Angular2FullstackPage;
+describe('sparkme App', function() {
+  let page: SparkMePage;
 
   beforeEach(() => {
-    page = new Angular2FullstackPage();
+    page = new SparkMePage();
   });
 
   it('should display message saying app works', () => {

@@ -2,7 +2,7 @@
 export default {
   // MongoDB connection options
   mongo: {
-    uri: 'mongodb://localhost/lala-dev',
+    uri: 'mongodb://localhost/sparkme-dev',
   },
 
   // Seed database on startup
