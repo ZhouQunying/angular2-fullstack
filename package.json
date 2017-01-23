@@ -46,7 +46,7 @@
     "core-js": "^2.4.1",
     "rxjs": "5.0.0-beta.12",
     "ts-helpers": "^1.1.1",
-    "zone.js": "^0.6.26"
+    "zone.js": "^0.6.23"
   },
   "devDependencies": {
     "@angular/compiler-cli": "2.2.3",
@@ -84,7 +84,7 @@
     "protractor": "4.0.9",
     "run-sequence": "^1.2.2",
     "ts-node": "1.2.1",
-    "tslint": "^4.0.2",
+    "tslint": "^4.1.1",
     "typescript": "~2.0.3",
     "webdriver-manager": "10.2.5"
   }
