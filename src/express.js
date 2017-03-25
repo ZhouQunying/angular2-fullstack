@@ -1,4 +1,3 @@
-import express from 'express';
 import path from 'path';
 import compression from 'compression';
 import bodyParser from 'body-parser';
@@ -8,8 +7,8 @@ import passport from 'passport';
 import session from 'express-session';
 import connectMongo from 'connect-mongo';
 import mongoose from 'mongoose';
+import consolidate from 'consolidate';
 import lusca from 'lusca';
-import favicon from 'serve-favicon';
 import morgan from 'morgan';
 import errorHandler from 'errorhandler';
 import connectLivereload from 'connect-livereload';
@@ -21,7 +20,8 @@ const MongoStore = connectMongo(session);
 export default (app) => {
   const env = app.get('env');
 
-  app.set('views', path.join(config.root, 'server/views'));
+  app.set('views', path.join(config.root, 'src/views'));
+  app.engine('html', consolidate.mustache);
   app.set('view engine', 'html');
   app.use(compression());
   app.use(bodyParser.urlencoded({ extended: false }));
@@ -38,17 +38,12 @@ export default (app) => {
       db: 'sparkme',
     }),
   }));
-  app.set('clientPath', path.join(config.root, 'client'));
-  app.use(express.static(app.get('clientPath')));
 
   if (env !== 'test') {
     app.use(lusca({
-      csrf: {
-        angular: true,
-      },
+      csrf: true,
       xframe: 'SAMEORIGIN',
       hsts: {
-        // 1 year, in seconds
         maxAge: 31536000,
         includeSubDomains: true,
         preload: true,
@@ -58,7 +53,6 @@ export default (app) => {
   }
 
   if (env === 'production') {
-    app.use(favicon(path.join(app.get('clientPath'), 'favicon.ico')));
     app.use(morgan('dev'));
   }
 

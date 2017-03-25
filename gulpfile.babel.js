@@ -2,45 +2,18 @@ import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import runSequence from 'run-sequence';
 import nodemon from 'nodemon';
-import http from 'http';
-import open from 'open';
 import del from 'del';
 import { union } from 'lodash';
 
-import localEnv from './server/config/local.env';
+import localEnv from './src/config/local.env';
 
 const $ = gulpLoadPlugins();
-let config;
 
 function onServerLog(log) {
   console.log($.util.colors.white('[') +
     $.util.colors.yellow('nodemon') +
     $.util.colors.white('] ') +
     log.message);
-}
-
-function checkAppReady(cb) {
-  const options = {
-    host: 'localhost',
-    port: config.port,
-  };
-
-  http
-    .get(options, () => cb(true))
-    .on('error', () => cb(false));
-}
-
-function whenServerReady(cb) {
-  let serverReady = false;
-  const appReadyInterval = setInterval(() =>
-    checkAppReady((ready) => {
-      if (!ready || serverReady) {
-        return;
-      }
-      clearInterval(appReadyInterval);
-      serverReady = true;
-      cb();
-    }), 100);
 }
 
 // Env
@@ -61,7 +34,7 @@ gulp.task('env:prod', () => {
 });
 
 gulp.task('eslint', () => {
-  gulp.src('server/**/*.js')
+  gulp.src('src/**/*.js')
     .pipe($.plumber())
     .pipe($.eslint({ useEslintrc: true }))
     .pipe($.eslint.format())
@@ -72,7 +45,7 @@ gulp.task('eslint', () => {
 gulp.task('watch', () => {
   $.livereload.listen();
 
-  gulp.watch('server/**/*.js', (event) => {
+  gulp.watch('src/**/*.js', (event) => {
     gulp.src(event.path)
       .pipe($.plumber())
       .pipe($.eslint({ useEslintrc: true }))
@@ -83,28 +56,20 @@ gulp.task('watch', () => {
 });
 
 // Server
-gulp.task('start:client', (cb) => {
-  whenServerReady(() => {
-    open(`http://localhost:${config.port}`);
-    cb();
-  });
-});
-gulp.task('start:server', () => {
+gulp.task('node', () => {
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-  config = require('./server/config/environment').default;
-  nodemon('-w server server')
+  nodemon('-w src src')
     .on('log', onServerLog);
 });
-gulp.task('start:server:prod', () => {
+gulp.task('node:prod', () => {
   process.env.NODE_ENV = process.env.NODE_ENV || 'production';
-  config = require('./dist/server/config/environment').default;
-  nodemon('-w dist/server dist/server')
+  nodemon('-w dist/src dist/src')
     .on('log', onServerLog);
 });
 gulp.task('serve', (cb) => {
   runSequence(
     'eslint',
-    ['start:server', 'start:client'],
+    'node',
     'watch',
     cb,
   );
@@ -114,7 +79,7 @@ gulp.task('serve:dist', (cb) => {
     'build',
     'env:all',
     'env:prod',
-    ['start:server:prod', 'start:client'],
+    'node:prod',
     cb,
   );
 });
@@ -123,14 +88,8 @@ gulp.task('serve:dist', (cb) => {
 gulp.task('clean', () => del('dist', { dot: true }));
 
 // Build
-gulp.task('build', cb =>
-  runSequence(
-    'clean',
-    'build:server',
-    cb,
-  ));
-gulp.task('build:server', () =>
-  gulp.src(union(['server/**/*.js'], ['server/**/*.json']))
+gulp.task('build', ['clean'], () =>
+  gulp.src(union(['src/**/*.js'], ['src/**/*.json']))
     .pipe($.sourcemaps.init())
     .pipe($.babel({
       plugins: [
@@ -139,7 +98,7 @@ gulp.task('build:server', () =>
       ],
     }))
     .pipe($.sourcemaps.write('.'))
-    .pipe(gulp.dest('dist/server')));
+    .pipe(gulp.dest('dist/src')));
 
 // Default
 gulp.task('default', ['serve']);

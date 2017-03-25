@@ -1,6 +1,6 @@
 # SparkMe
-  This is a Angular2 fullstack project.
-> Using MongoDB, Express, Angular2, and Node, using ES6, gulp for automate workflow, and Sass grade CSS extension. And of course HTML5 and CSS3.
+  This is the server side of SparkMe.
+> Using Node, Express, and Mongoose, using ES6.
 
 ## More
   Coming soon.
